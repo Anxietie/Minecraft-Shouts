@@ -1,0 +1,10 @@
+{
+  "key.anxshouts.shout_key": "Shout",
+  "key.anxshouts.gui_open_key": "Open Shout Selection",
+  "category.anxshouts.shout_controls": "Minecraft Shouts",
+  "commands.shout.source": "INVALID COMMAND SOURCE",
+  "shouts.none": "No shout selected",
+  "shouts.fire": "Fire Breath",
+  "shouts.frost": "Frost Breath",
+  "shouts.force": "Unrelenting Force"
+}

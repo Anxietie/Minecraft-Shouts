@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "anxshouts",
+  "version": "${version}",
+  "name": "Minecraft Shouts",
+  "description": "Adds shouts from Skyrim to Minecraft",
+  "authors": [
+    "Anxietie"
+  ],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/anxshouts/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "com.mod.anxshouts.client.MinecraftShoutsClient"
+    ],
+    "main": [
+      "com.mod.anxshouts.MinecraftShouts"
+    ],
+    "cardinal-components-entity": [
+      "com.mod.anxshouts.components.ModComponents"
+    ]
+  },
+  "mixins": [
+    "anxshouts.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "java": ">=17",
+    "libgui": "8.0.2"
+  },
+  "custom": {
+    "cardinal-components": [
+      "anxshouts:shouts"
+    ]
+  }
+}
