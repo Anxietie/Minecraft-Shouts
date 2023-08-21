@@ -2,6 +2,7 @@ package com.mod.anxshouts.client.gui;
 
 import com.mod.anxshouts.client.util.ShoutHandler;
 import com.mod.anxshouts.components.IShout;
+import com.mod.anxshouts.networking.ModPackets;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.cottonmc.cotton.gui.widget.*;
@@ -11,10 +12,13 @@ import io.github.cottonmc.cotton.gui.widget.icon.Icon;
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.util.TriState;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ClickableWidget;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -24,7 +28,7 @@ import static com.mod.anxshouts.MinecraftShouts.MODID;
 public class ShoutSelectionGui extends LightweightGuiDescription {
     WColorButton selectedShoutBuffer = null;
 
-    public ShoutSelectionGui(PlayerEntity player) {
+    public ShoutSelectionGui(ClientPlayerEntity player) {
         WGridPanel root = (WGridPanel) rootPanel;
 
         WBox shoutsBox = new WBox(Axis.VERTICAL);
@@ -33,12 +37,17 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
         root.setSize(10, 10);
 
-        for (ShoutHandler.Shout shout : ShoutHandler.Shout.values()) {
-            if (shout == ShoutHandler.Shout.NONE) continue;
+        IShout data = IShout.KEY.get(player);
 
-            WColorButton shoutSelector = new WColorButton(Text.translatable("shouts." + shout.getId()));
-            shoutSelector.setEnabled(IShout.KEY.get(player).hasShout(shout.ordinal()));
-            if (IShout.KEY.get(player).getSelectedShout() == shout.ordinal()) {
+        for (int i = 1; i < ShoutHandler.Shout.values().length; i++) {
+            final int ordinal = i; // have to do this cuz of some stupid lambda requirement (lamda arguments should be final)
+            ShoutHandler.Shout shout = ShoutHandler.Shout.fromOrdinal(ordinal);
+            if (shout == ShoutHandler.Shout.NONE) continue;
+            if (!data.hasUnlockedShout(ordinal)) continue;
+
+            WColorButton shoutSelector = new WColorButton(Text.translatable("anxshouts.shouts." + shout.getId()));
+            shoutSelector.setEnabled(data.hasObtainedShout(ordinal));
+            if (data.getSelectedShout() == ordinal) {
                 shoutSelector.setColor(0x4d_FFA500);
                 selectedShoutBuffer = shoutSelector;
             }
@@ -46,14 +55,15 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
                 shoutSelector.setColor(0xFF_FFFFFF);
             }
             shoutSelector.setOnClick(() -> {
-                // PacketByteBuf selectShoutPacket = PacketByteBufs.create();
-                // selectShoutPacket.writeInt(shout.ordinal());
-                // ClientPlayNetworking.send(ModPackets.SHOUT_SELECTION_ID, selectShoutPacket);
-                // ShoutData.setSelectedShout((IEntityData) player, shout);
-                IShout.KEY.get(player).setSelectedShout(shout.ordinal());
+                data.setSelectedShout(ordinal);
+                sendPacket(ModPackets.SELECT_SHOUT_ID, ordinal);
                 shoutSelector.setColor(0x4dFFA500);
                 shoutSelector.tick();
                 if (selectedShoutBuffer != null) {
+                    if (selectedShoutBuffer.equals(shoutSelector)) {
+                        data.setSelectedShout(0);
+                        sendPacket(ModPackets.SELECT_SHOUT_ID, 0);
+                    }
                     selectedShoutBuffer.setColor(0xFF_FFFFFF);
                     selectedShoutBuffer.tick();
                 }
@@ -61,13 +71,10 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
             });
 
             WButton unlocker = new WButton(new TextureIcon(new Identifier(MODID, "textures/gui/locked_widget.png")));
-            unlocker.setEnabled(!IShout.KEY.get(player).hasShout(shout.ordinal()));
+            unlocker.setEnabled(!data.hasObtainedShout(ordinal));
             unlocker.setOnClick(() -> {
-                // PacketByteBuf unlockShoutPacket = PacketByteBufs.create();
-                // unlockShoutPacket.writeInt(shout.ordinal());
-                // ClientPlayNetworking.send(ModPackets.SHOUT_OBTAINED_ID, unlockShoutPacket);
-                // ShoutData.obtainShout((IEntityData) player, shout);
-                IShout.KEY.get(player).obtainShout(shout.ordinal());
+                data.obtainShout(ordinal);
+                sendPacket(ModPackets.OBTAIN_SHOUT_ID, ordinal);
                 unlocker.setEnabled(false);
                 shoutSelector.setEnabled(true);
                 unlocker.tick();
@@ -78,6 +85,10 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
             unlockBox.add(unlocker);
         }
 
+        if (shoutsBox.streamChildren().findAny().isEmpty()) {
+            masterBox.add(new WLabel(Text.literal("lol u have no shouts")));
+        }
+
         masterBox.setSpacing(0);
         masterBox.add(shoutsBox);
         masterBox.add(unlockBox);
@@ -85,6 +96,12 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         root.add(new WScrollPanel(masterBox).setScrollingHorizontally(TriState.FALSE), 0, 0, 10, 10);
 
         root.validate(this);
+    }
+
+    private void sendPacket(Identifier channel, int shoutOrdinal) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(shoutOrdinal);
+        ClientPlayNetworking.send(channel, buf);
     }
 
     public static class WColorButton extends WButton {

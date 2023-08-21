@@ -2,13 +2,19 @@ package com.mod.anxshouts.components;
 
 import com.mod.anxshouts.client.util.ShoutHandler;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import dev.onyxstudios.cca.api.v3.component.tick.ClientTickingComponent;
+import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 
-public class PlayerShout implements IShout, ServerTickingComponent, AutoSyncedComponent {
+import java.util.Arrays;
+
+import static com.mojang.text2speech.Narrator.LOGGER;
+
+public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSyncedComponent {
     protected int selectedShout;
     protected int[] unlockedShouts;
     protected int[] obtainedShouts;
@@ -18,8 +24,8 @@ public class PlayerShout implements IShout, ServerTickingComponent, AutoSyncedCo
     public PlayerShout(PlayerEntity provider) {
         this.provider = provider;
         this.selectedShout = 0;
-        this.unlockedShouts = new int[ShoutHandler.Shout.values().length];;
-        this.obtainedShouts = new int[ShoutHandler.Shout.values().length];;
+        this.unlockedShouts = new int[ShoutHandler.Shout.values().length];
+        this.obtainedShouts = new int[ShoutHandler.Shout.values().length];
         this.shoutCooldown = 0;
     }
 
@@ -28,7 +34,7 @@ public class PlayerShout implements IShout, ServerTickingComponent, AutoSyncedCo
     @Override
     public void setSelectedShout(int shoutOrdinal) {
         this.selectedShout = shoutOrdinal;
-        IShout.KEY.sync(this.provider);
+        obtainShout(shoutOrdinal);
     }
     @Override
     public int[] getUnlockedShouts() { return this.unlockedShouts; }
@@ -38,19 +44,52 @@ public class PlayerShout implements IShout, ServerTickingComponent, AutoSyncedCo
         IShout.KEY.sync(this.provider);
     }
     @Override
+    public void unlockAllShouts() {
+        Arrays.fill(this.unlockedShouts, 1);
+        IShout.KEY.sync(this.provider);
+    }
+    @Override
+    public void lockShout(int shoutOrdinal) {
+        this.unlockedShouts[shoutOrdinal] = 0;
+        removeShout(shoutOrdinal);
+    }
+    @Override
+    public void lockAllShouts() {
+        this.unlockedShouts = new int[ShoutHandler.Shout.values().length];
+        removeAllShouts();
+    }
+    @Override
     public int[] getObtainedShouts() { return this.obtainedShouts; }
     @Override
     public void obtainShout(int shoutOrdinal) {
         this.obtainedShouts[shoutOrdinal] = 1;
-        IShout.KEY.sync(this.provider);
+        unlockShout(shoutOrdinal);
+    }
+    public void obtainAllShouts() {
+        Arrays.fill(this.obtainedShouts, 1);
+        unlockAllShouts();
     }
     @Override
     public void removeShout(int shoutOrdinal) {
+        if (this.selectedShout == shoutOrdinal)
+            this.selectedShout = 0;
         this.obtainedShouts[shoutOrdinal] = 0;
         IShout.KEY.sync(this.provider);
     }
     @Override
-    public boolean hasShout(int shoutOrdinal) { return this.obtainedShouts[shoutOrdinal] == 1; }
+    public void removeAllShouts() {
+        this.obtainedShouts = new int[ShoutHandler.Shout.values().length];
+        this.selectedShout = 0;
+        IShout.KEY.sync(this.provider);
+    }
+    @Override
+    public boolean hasObtainedShout(int shoutOrdinal) {
+        return this.obtainedShouts[shoutOrdinal] == 1;
+    }
+    @Override
+    public boolean hasUnlockedShout(int shoutOrdinal) {
+        return this.unlockedShouts[shoutOrdinal] == 1;
+    }
     @Override
     public int getShoutCooldown() { return this.shoutCooldown; }
     @Override
@@ -81,15 +120,9 @@ public class PlayerShout implements IShout, ServerTickingComponent, AutoSyncedCo
     }
 
     @Override
-    public void serverTick() {
-        if (this.getShoutCooldown() > 0)
-            this.decrementShoutCooldown();
-    }
-
-    @Override
     public void writeSyncPacket(PacketByteBuf buf, ServerPlayerEntity player) {
         // only synchronize the information you need!
-        buf.writeVarInt(this.selectedShout);
+        buf.writeInt(this.selectedShout);
         buf.writeIntArray(this.unlockedShouts);
         buf.writeIntArray(this.obtainedShouts);
         buf.writeInt(this.shoutCooldown);
@@ -107,4 +140,15 @@ public class PlayerShout implements IShout, ServerTickingComponent, AutoSyncedCo
     public boolean shouldSyncWith(ServerPlayerEntity player) {
         return player == this.provider; // only sync with the provider itself
     }
+
+    /*
+    @Override
+    public void serverTick() {
+        if (this.shoutCooldown > 0) {
+            this.decrementShoutCooldown();
+            LOGGER.info("" + this.shoutCooldown);
+        }
+    }
+
+     */
 }

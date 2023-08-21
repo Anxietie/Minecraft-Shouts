@@ -1,10 +1,12 @@
 {
   "key.anxshouts.shout_key": "Shout",
   "key.anxshouts.gui_open_key": "Open Shout Selection",
-  "category.anxshouts.shout_controls": "Minecraft Shouts",
-  "commands.shout.source": "INVALID COMMAND SOURCE",
-  "shouts.none": "No shout selected",
-  "shouts.fire": "Fire Breath",
-  "shouts.frost": "Frost Breath",
-  "shouts.force": "Unrelenting Force"
+  "category.anxshouts.shout.shout_controls": "Minecraft Shouts",
+  "commands.anxshouts.shout.invalid_source": "INVALID COMMAND SOURCE",
+  "commands.anxshouts.shout.invalid_argument": "INVALID ARGUMENT",
+  "subtitle.anxshouts.unrelenting_force": "Unrelenting Force",
+  "anxshouts.shouts.none": "No shout selected",
+  "anxshouts.shouts.fire": "Fire Breath",
+  "anxshouts.shouts.frost": "Frost Breath",
+  "anxshouts.shouts.force": "Unrelenting Force"
 }

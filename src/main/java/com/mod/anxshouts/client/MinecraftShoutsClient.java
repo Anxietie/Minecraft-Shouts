@@ -1,6 +1,7 @@
 package com.mod.anxshouts.client;
 
 import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.networking.ModPackets;
 import com.mod.anxshouts.registry.CommandRegister;
 import com.mod.anxshouts.client.registry.KeybindRegister;
 import net.fabricmc.api.ClientModInitializer;
@@ -17,6 +18,12 @@ public class MinecraftShoutsClient implements ClientModInitializer {
         LOGGER.info("Shouts keybindings registered");
 
         CommandRegister.commandCallback();
-        ShoutHandler.shoutCallback();
+        LOGGER.info("Shouts commands registered");
+
+        ShoutHandler.keyCallback();
+        LOGGER.info("Shouts callback registered");
+
+        ModPackets.registerS2CPackets();
+        LOGGER.info("Shouts server-to-client packets initialized");
     }
 }

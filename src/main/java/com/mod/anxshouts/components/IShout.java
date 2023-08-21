@@ -14,10 +14,16 @@ public interface IShout extends ComponentV3 {
     void setSelectedShout(int shoutOrdinal);
     int[] getUnlockedShouts();
     void unlockShout(int shoutOrdinal);
+    void unlockAllShouts();
+    void lockShout(int shoutOrdinal);
+    void lockAllShouts();
     int[] getObtainedShouts();
     void obtainShout(int shoutOrdinal);
+    void obtainAllShouts();
     void removeShout(int shoutOrdinal);
-    boolean hasShout(int shoutOrdinal);
+    void removeAllShouts();
+    boolean hasObtainedShout(int shoutOrdinal);
+    boolean hasUnlockedShout(int shoutOrdinal);
     int getShoutCooldown();
     void setShoutCooldown(int ticks);
     default void resetShoutCooldown() { setShoutCooldown(0); }
