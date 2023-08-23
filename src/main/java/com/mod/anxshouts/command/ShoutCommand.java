@@ -23,7 +23,6 @@ public class ShoutCommand {
     private static final SimpleCommandExceptionType INVALID_SOURCE = new SimpleCommandExceptionType(Text.translatable("commands.anxshouts.shout.invalid_source"));
     private static final SimpleCommandExceptionType INVALID_ARGUMENT = new SimpleCommandExceptionType(Text.translatable("commands.anxshouts.shout.invalid_argument"));
 
-    // TODO: create new argument type that accepts "all" so this doesnt look retarded
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(literal("shout")
                 .requires(source -> source.hasPermissionLevel(2))

@@ -5,6 +5,7 @@ import com.mod.anxshouts.client.gui.ShoutSelectionScreen;
 import com.mod.anxshouts.client.registry.KeybindRegister;
 import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.networking.ModPackets;
+import com.mod.anxshouts.util.ModUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -13,6 +14,8 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.Packet;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.StringIdentifiable;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +36,9 @@ public class ShoutHandler {
                     client.inGameHud.setOverlayMessage(Text.literal("Shout on cooldown for " + remainingSeconds + " more seconds"), true);
                     return;
                 }
+
+                ModUtils.emitParticles(player, 20);
+
                 ClientPlayNetworking.send(ModPackets.ACTION_SHOUT_ID, PacketByteBufs.create());
             }
             while (KeybindRegister.SHOUT_GUI_OPEN_KEY.wasPressed()) {
@@ -43,18 +49,24 @@ public class ShoutHandler {
     }
 
     public enum Shout implements StringIdentifiable {
-        NONE("none"),
-        FIRE("fire"),
-        FROST("frost"),
-        FORCE("force");
+        NONE("none", 0, null),
+        FIRE("fire", 2, ParticleTypes.FLAME),
+        FROST("frost", 1, ParticleTypes.SNOWFLAKE),
+        FORCE("force", 2, ParticleTypes.BUBBLE),
+        AURA("aura", 1, ParticleTypes.ENCHANT),
+        STORM("storm", 2, ParticleTypes.CRIT);
 
         public static final Codec<Shout> CODEC;
         private final String id;
         private final Text name;
+        private final int cost;
+        private final ParticleEffect particle;
 
-        Shout(String id) {
+        Shout(String id, int cost, ParticleEffect associatedParticle) {
             this.id = id;
             this.name = Text.translatable("shouts." + id);
+            this.cost = cost;
+            this.particle = associatedParticle;
         }
 
         @Override
@@ -73,6 +85,10 @@ public class ShoutHandler {
             if (ordinal >= values().length || ordinal < 0) throw new IllegalArgumentException("Shout of index " + ordinal + " does not exist!");
             return values()[ordinal];
         }
+
+        public ParticleEffect getParticleEffect() { return this.particle; }
+
+        public int getCost() { return this.cost; }
 
         static {
             CODEC = StringIdentifiable.createCodec(Shout::values);

@@ -4,5 +4,29 @@
     "sounds": [
       "anxshouts:unrelenting_force"
     ]
+  },
+  "fire_breath": {
+    "subtitle": "subtitle.anxshouts.fire_breath",
+    "sounds": [
+      "anxshouts:fire_breath"
+    ]
+  },
+  "frost_breath": {
+    "subtitle": "subtitle.anxshouts.frost_breath",
+    "sounds": [
+      "anxshouts:frost_breath"
+    ]
+  },
+  "aura_whisper": {
+    "subtitle": "subtitle.anxshouts.aura_whisper",
+    "sounds": [
+      "anxshouts:aura_whisper"
+    ]
+  },
+  "storm_call": {
+    "subtitle": "subtitle.anxshouts.storm_call",
+    "sounds": [
+      "anxshouts:storm_call"
+    ]
   }
 }

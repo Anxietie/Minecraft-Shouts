@@ -5,8 +5,19 @@
   "commands.anxshouts.shout.invalid_source": "INVALID COMMAND SOURCE",
   "commands.anxshouts.shout.invalid_argument": "INVALID ARGUMENT",
   "subtitle.anxshouts.unrelenting_force": "Unrelenting Force",
+  "subtitle.anxshouts.fire_breath": "Fire Breath",
+  "subtitle.anxshouts.frost_breath": "Frost Breath",
+  "subtitle.anxshouts.aura_whisper": "Aura Whisper",
+  "subtitle.anxshouts.storm_call": "Storm Call",
   "anxshouts.shouts.none": "No shout selected",
   "anxshouts.shouts.fire": "Fire Breath",
   "anxshouts.shouts.frost": "Frost Breath",
-  "anxshouts.shouts.force": "Unrelenting Force"
+  "anxshouts.shouts.force": "Unrelenting Force",
+  "anxshouts.shouts.aura": "Aura Whisper",
+  "anxshouts.shouts.storm": "Storm Call",
+  "anxshouts.shouts.fire.description": "Inhale air, exhale flame, and behold the Thu'um as inferno",
+  "anxshouts.shouts.frost.description": "Your breath is winter, your Thu'um a blizzard",
+  "anxshouts.shouts.force.description": "Your Voice is raw power, pushing aside anything - or anyone - who stands in your path",
+  "anxshouts.shouts.aura.description": "Your Voice is not a Shout, but a whisper, revealing the life forces of any and all",
+  "anxshouts.shouts.storm.description": "A Shout to the skies, a cry to the clouds, that awakens the destructive force of Minecraft's lightning"
 }

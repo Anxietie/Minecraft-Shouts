@@ -47,6 +47,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
             WColorButton shoutSelector = new WColorButton(Text.translatable("anxshouts.shouts." + shout.getId()));
             shoutSelector.setEnabled(data.hasObtainedShout(ordinal));
+            shoutSelector.addTooltip(new TooltipBuilder().add(Text.translatable("anxshouts.shouts." + shout.getId() + "description")));
             if (data.getSelectedShout() == ordinal) {
                 shoutSelector.setColor(0x4d_FFA500);
                 selectedShoutBuffer = shoutSelector;
@@ -58,20 +59,27 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
                 data.setSelectedShout(ordinal);
                 sendPacket(ModPackets.SELECT_SHOUT_ID, ordinal);
                 shoutSelector.setColor(0x4dFFA500);
-                shoutSelector.tick();
-                if (selectedShoutBuffer != null) {
-                    if (selectedShoutBuffer.equals(shoutSelector)) {
-                        data.setSelectedShout(0);
-                        sendPacket(ModPackets.SELECT_SHOUT_ID, 0);
-                    }
+
+                if (selectedShoutBuffer == null)
+                    selectedShoutBuffer = shoutSelector;
+                else if (selectedShoutBuffer.equals(shoutSelector)) {
+                    data.setSelectedShout(0);
+                    sendPacket(ModPackets.SELECT_SHOUT_ID, 0);
+
+                    selectedShoutBuffer = null;
+                    shoutSelector.setColor(0xFF_FFFFFF);
+                }
+                else {
                     selectedShoutBuffer.setColor(0xFF_FFFFFF);
                     selectedShoutBuffer.tick();
+                    selectedShoutBuffer = shoutSelector;
                 }
-                selectedShoutBuffer = shoutSelector;
+                shoutSelector.tick();
             });
 
             WButton unlocker = new WButton(new TextureIcon(new Identifier(MODID, "textures/gui/locked_widget.png")));
             unlocker.setEnabled(!data.hasObtainedShout(ordinal));
+            unlocker.addTooltip(new TooltipBuilder().add(Text.literal("Costs " + shout.getCost() + " dragon souls")));
             unlocker.setOnClick(() -> {
                 data.obtainShout(ordinal);
                 sendPacket(ModPackets.OBTAIN_SHOUT_ID, ordinal);
@@ -93,7 +101,10 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         masterBox.add(shoutsBox);
         masterBox.add(unlockBox);
 
-        root.add(new WScrollPanel(masterBox).setScrollingHorizontally(TriState.FALSE), 0, 0, 10, 10);
+        WScrollPanel scrollPanel = new WScrollPanel(masterBox);
+        scrollPanel.setScrollingHorizontally(TriState.FALSE);
+
+        root.add(scrollPanel, 0, 0, 10, 10);
 
         root.validate(this);
     }
