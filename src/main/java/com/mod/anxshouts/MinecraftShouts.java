@@ -1,10 +1,10 @@
 package com.mod.anxshouts;
 
+import com.mod.anxshouts.events.EntityDeathEvent;
 import com.mod.anxshouts.events.ServerTickEvent;
 import com.mod.anxshouts.networking.ModPackets;
 import com.mod.anxshouts.registry.SoundRegister;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +26,7 @@ public class MinecraftShouts implements ModInitializer {
         LOGGER.info("Shouts sounds registered");
 
         ServerTickEvent.registerServerTicks();
-        LOGGER.info("Shouts server tick events registered");
+        EntityDeathEvent.registerEntityDeaths();
+        LOGGER.info("Shouts events registered");
     }
 }

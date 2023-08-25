@@ -29,5 +29,9 @@ public interface IShout extends ComponentV3 {
     void setShoutCooldown(int ticks);
     default void resetShoutCooldown() { setShoutCooldown(0); }
     void decrementShoutCooldown();
+    int getSoulCount();
+    void incrementSoulCount();
+    void setSoulCount(int souls);
+    void decrementSoulCount();
 }
 

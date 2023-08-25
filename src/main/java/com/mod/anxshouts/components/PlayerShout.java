@@ -2,9 +2,6 @@ package com.mod.anxshouts.components;
 
 import com.mod.anxshouts.client.util.ShoutHandler;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.ClientTickingComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.CommonTickingComponent;
-import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -12,13 +9,12 @@ import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Arrays;
 
-import static com.mojang.text2speech.Narrator.LOGGER;
-
-public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSyncedComponent {
+public class PlayerShout implements IShout, AutoSyncedComponent {
     protected int selectedShout;
     protected int[] unlockedShouts;
     protected int[] obtainedShouts;
     protected int shoutCooldown;
+    protected int souls;
     private final Object provider;
 
     public PlayerShout(PlayerEntity provider) {
@@ -27,6 +23,7 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
         this.unlockedShouts = new int[ShoutHandler.Shout.values().length];
         this.obtainedShouts = new int[ShoutHandler.Shout.values().length];
         this.shoutCooldown = 0;
+        this.souls = 0;
     }
 
     @Override
@@ -41,12 +38,12 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
     @Override
     public void unlockShout(int shoutOrdinal) {
         this.unlockedShouts[shoutOrdinal] = 1;
-        IShout.KEY.sync(this.provider);
+        sync();
     }
     @Override
     public void unlockAllShouts() {
         Arrays.fill(this.unlockedShouts, 1);
-        IShout.KEY.sync(this.provider);
+        sync();
     }
     @Override
     public void lockShout(int shoutOrdinal) {
@@ -74,13 +71,13 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
         if (this.selectedShout == shoutOrdinal)
             this.selectedShout = 0;
         this.obtainedShouts[shoutOrdinal] = 0;
-        IShout.KEY.sync(this.provider);
+        sync();
     }
     @Override
     public void removeAllShouts() {
         this.obtainedShouts = new int[ShoutHandler.Shout.values().length];
         this.selectedShout = 0;
-        IShout.KEY.sync(this.provider);
+        sync();
     }
     @Override
     public boolean hasObtainedShout(int shoutOrdinal) {
@@ -95,28 +92,51 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
     @Override
     public void setShoutCooldown(int ticks) {
         this.shoutCooldown = ticks;
-        IShout.KEY.sync(this.provider);
+        sync();
     }
     @Override
     public void decrementShoutCooldown() {
         --this.shoutCooldown;
-        IShout.KEY.sync(this.provider);
+        sync();
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
-        this.selectedShout = tag.getInt("SelectedShout");
-        this.unlockedShouts = tag.getIntArray("UnlockedShouts");
-        this.obtainedShouts = tag.getIntArray("ObtainedShouts");
-        this.shoutCooldown = tag.getInt("ShoutCooldown");
+    public int getSoulCount() { return this.souls; }
+
+    @Override
+    public void incrementSoulCount() {
+        ++this.souls;
+        sync();
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag) {
-        tag.putInt("SelectedShout", this.selectedShout);
-        tag.putIntArray("UnlockedShouts", this.unlockedShouts);
-        tag.putIntArray("ObtainedShouts", this.obtainedShouts);
-        tag.putInt("ShoutCooldown", this.shoutCooldown);
+    public void setSoulCount(int souls) {
+        this.souls = souls;
+        sync();
+    }
+
+    @Override
+    public void decrementSoulCount() {
+        --this.souls;
+        sync();
+    }
+
+    @Override
+    public void readFromNbt(NbtCompound nbt) {
+        this.selectedShout = nbt.getInt("SelectedShout");
+        this.unlockedShouts = nbt.getIntArray("UnlockedShouts");
+        this.obtainedShouts = nbt.getIntArray("ObtainedShouts");
+        this.shoutCooldown = nbt.getInt("ShoutCooldown");
+        this.souls = nbt.getInt("SoulCount");
+    }
+
+    @Override
+    public void writeToNbt(NbtCompound nbt) {
+        nbt.putInt("SelectedShout", this.selectedShout);
+        nbt.putIntArray("UnlockedShouts", this.unlockedShouts);
+        nbt.putIntArray("ObtainedShouts", this.obtainedShouts);
+        nbt.putInt("ShoutCooldown", this.shoutCooldown);
+        nbt.putInt("SoulCount", this.souls);
     }
 
     @Override
@@ -126,6 +146,7 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
         buf.writeIntArray(this.unlockedShouts);
         buf.writeIntArray(this.obtainedShouts);
         buf.writeInt(this.shoutCooldown);
+        buf.writeInt(this.souls);
     }
 
     @Override
@@ -134,6 +155,7 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
         this.unlockedShouts = buf.readIntArray();
         this.obtainedShouts = buf.readIntArray();
         this.shoutCooldown = buf.readInt();
+        this.souls = buf.readInt();
     }
 
     @Override
@@ -141,14 +163,5 @@ public class PlayerShout implements IShout, /*ServerTickingComponent,*/ AutoSync
         return player == this.provider; // only sync with the provider itself
     }
 
-    /*
-    @Override
-    public void serverTick() {
-        if (this.shoutCooldown > 0) {
-            this.decrementShoutCooldown();
-            LOGGER.info("" + this.shoutCooldown);
-        }
-    }
-
-     */
+    private void sync() { IShout.KEY.sync(this.provider); }
 }

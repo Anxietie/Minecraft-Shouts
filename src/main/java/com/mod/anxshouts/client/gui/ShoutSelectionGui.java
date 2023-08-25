@@ -38,6 +38,8 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
         IShout data = IShout.KEY.get(player);
 
+        WLabel soulsCount = new WLabel(Text.literal("Souls: " + data.getSoulCount()));
+
         for (int i = 1; i < ShoutHandler.Shout.values().length; i++) {
             ShoutHandler.Shout shout = ShoutHandler.Shout.fromOrdinal(i);
             if (shout == ShoutHandler.Shout.NONE) continue;
@@ -45,7 +47,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
             WColorButton shoutSelector = createShoutSelectionButton(data, shout);
 
-            WButton unlocker = createShoutUnlockerButton(data, shoutSelector , shout);
+            WButton unlocker = createShoutUnlockerButton(data, shoutSelector, soulsCount, shout);
 
             shoutsBox.add(shoutSelector, 162, 18);
             unlockBox.add(unlocker);
@@ -61,14 +63,21 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         WScrollPanel scrollPanel = new WScrollPanel(masterBox);
         scrollPanel.setScrollingHorizontally(TriState.FALSE);
 
-        root.add(scrollPanel, 0, 0, 10, 10);
+        root.add(soulsCount, 0, 0);
+        root.add(scrollPanel, 0, 1, 10, 10);
 
         root.validate(this);
     }
 
-    private void sendPacket(Identifier channel, int shoutOrdinal) {
+    private void sendShoutPacket(Identifier channel, int shoutOrdinal) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(shoutOrdinal);
+        ClientPlayNetworking.send(channel, buf);
+    }
+
+    private void sendSoulsPacket(Identifier channel, int souls) {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(souls);
         ClientPlayNetworking.send(channel, buf);
     }
 
@@ -87,14 +96,14 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         }
         shoutSelector.setOnClick(() -> {
             data.setSelectedShout(ordinal);
-            sendPacket(ModPackets.SELECT_SHOUT_ID, ordinal);
+            sendShoutPacket(ModPackets.SELECT_SHOUT_ID, ordinal);
             shoutSelector.setColor(0x4dFFA500);
 
             if (selectedShoutBuffer == null)
                 selectedShoutBuffer = shoutSelector;
             else if (selectedShoutBuffer.equals(shoutSelector)) {
                 data.setSelectedShout(0);
-                sendPacket(ModPackets.SELECT_SHOUT_ID, 0);
+                sendShoutPacket(ModPackets.SELECT_SHOUT_ID, 0);
 
                 selectedShoutBuffer = null;
                 shoutSelector.setColor(0xFF_FFFFFF);
@@ -110,7 +119,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         return shoutSelector;
     }
 
-    private WButton createShoutUnlockerButton(IShout data, WColorButton shoutSelector, ShoutHandler.Shout shout) {
+    private WButton createShoutUnlockerButton(IShout data, WColorButton shoutSelector, WLabel soulsCount, ShoutHandler.Shout shout) {
         int ordinal = shout.ordinal();
         WButton unlocker = new WButton(new TextureIcon(new Identifier(MODID, "textures/gui/locked_widget.png"))) {
             @Override
@@ -118,14 +127,17 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
                 builder.add(Text.literal("Costs " + shout.getCost() + " dragon souls"));
             }
         };
-        unlocker.setEnabled(!data.hasObtainedShout(ordinal));
+        unlocker.setEnabled(!data.hasObtainedShout(ordinal) && data.getSoulCount() >= shout.getCost());
         unlocker.setOnClick(() -> {
             data.obtainShout(ordinal);
-            sendPacket(ModPackets.OBTAIN_SHOUT_ID, ordinal);
+            sendSoulsPacket(ModPackets.SOUL_COUNT_ID, data.getSoulCount() - shout.getCost());
+            sendShoutPacket(ModPackets.OBTAIN_SHOUT_ID, ordinal);
+            soulsCount.setText(Text.literal("Souls: " + data.getSoulCount()));
             unlocker.setEnabled(false);
             shoutSelector.setEnabled(true);
             unlocker.tick();
             shoutSelector.tick();
+            soulsCount.tick();
         });
 
         return unlocker;
