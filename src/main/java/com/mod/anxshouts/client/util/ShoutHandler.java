@@ -12,8 +12,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
@@ -64,7 +62,7 @@ public class ShoutHandler {
 
         Shout(String id, int cost, ParticleEffect associatedParticle) {
             this.id = id;
-            this.name = Text.translatable("shouts." + id);
+            this.name = Text.translatable("anxshouts.shouts." + id);
             this.cost = cost;
             this.particle = associatedParticle;
         }
@@ -89,6 +87,12 @@ public class ShoutHandler {
         public ParticleEffect getParticleEffect() { return this.particle; }
 
         public int getCost() { return this.cost; }
+
+        public static Shout byId(String id) {
+            for (Shout shout : values())
+                if (shout.getId().equals(id)) return shout;
+            return NONE;
+        }
 
         static {
             CODEC = StringIdentifiable.createCodec(Shout::values);
