@@ -13,6 +13,7 @@ public class SoundRegister {
     public static final SoundEvent FROST_BREATH = SoundEvent.of(new Identifier(MODID, "frost_breath"));
     public static final SoundEvent AURA_WHISPER = SoundEvent.of(new Identifier(MODID, "aura_whisper"));
     public static final SoundEvent STORM_CALL = SoundEvent.of(new Identifier(MODID, "storm_call"));
+    public static final SoundEvent ABSORB_SOUL = SoundEvent.of(new Identifier(MODID, "absorb_soul"));
 
     public static void registerSounds() {
         register("unrelenting_force", UNRELENTING_FORCE);
@@ -20,6 +21,7 @@ public class SoundRegister {
         register("frost_breath", FROST_BREATH);
         register("aura_whisper", AURA_WHISPER);
         register("storm_call", STORM_CALL);
+        register("absorb_soul", ABSORB_SOUL);
     }
 
     private static SoundEvent register(String id, SoundEvent soundEvent) {

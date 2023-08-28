@@ -8,6 +8,7 @@ import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.cottonmc.cotton.gui.widget.*;
 import io.github.cottonmc.cotton.gui.widget.data.Axis;
 import io.github.cottonmc.cotton.gui.widget.data.HorizontalAlignment;
+import io.github.cottonmc.cotton.gui.widget.icon.Icon;
 import io.github.cottonmc.cotton.gui.widget.icon.TextureIcon;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.mod.anxshouts.MinecraftShouts.MODID;
 
+// TODO: fix obtaining system
 public class ShoutSelectionGui extends LightweightGuiDescription {
     WColorButton selectedShoutBuffer = null;
 
@@ -47,7 +49,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
             WColorButton shoutSelector = createShoutSelectionButton(data, shout);
 
-            WButton unlocker = createShoutUnlockerButton(data, shoutSelector, soulsCount, shout);
+            WShoutUnlockButton unlocker = createShoutUnlockerButton(data, unlockBox, shoutSelector, soulsCount, shout);
 
             shoutsBox.add(shoutSelector, 162, 18);
             unlockBox.add(unlocker);
@@ -119,9 +121,9 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         return shoutSelector;
     }
 
-    private WButton createShoutUnlockerButton(IShout data, WColorButton shoutSelector, WLabel soulsCount, ShoutHandler.Shout shout) {
+    private WShoutUnlockButton createShoutUnlockerButton(IShout data, WBox unlockBox, WColorButton shoutSelector, WLabel soulsCount, ShoutHandler.Shout shout) {
         int ordinal = shout.ordinal();
-        WButton unlocker = new WButton(new TextureIcon(new Identifier(MODID, "textures/gui/locked_widget.png"))) {
+        WShoutUnlockButton unlocker = new WShoutUnlockButton(ordinal, new TextureIcon(new Identifier(MODID, "textures/gui/locked_widget.png"))) {
             @Override
             public void addTooltip(TooltipBuilder builder) {
                 builder.add(Text.literal("Costs " + shout.getCost() + " dragon souls"));
@@ -132,18 +134,25 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
             data.obtainShout(ordinal);
             sendSoulsPacket(ModPackets.SOUL_COUNT_ID, data.getSoulCount() - shout.getCost());
             sendShoutPacket(ModPackets.OBTAIN_SHOUT_ID, ordinal);
-            soulsCount.setText(Text.literal("Souls: " + data.getSoulCount()));
+            soulsCount.setText(Text.literal("Souls: " + (data.getSoulCount() - shout.getCost())));
             unlocker.setEnabled(false);
             shoutSelector.setEnabled(true);
-            unlocker.tick();
             shoutSelector.tick();
             soulsCount.tick();
+            tickAllUnlockers(data, unlockBox, shout);
         });
 
         return unlocker;
     }
 
-    public static class WColorButton extends WButton {
+    private void tickAllUnlockers(IShout data, WBox unlockBox, ShoutHandler.Shout shout) {
+        unlockBox.streamChildren().forEach(widget -> {
+            ((WShoutUnlockButton) widget).setEnabled(data.getSoulCount() - shout.getCost() >= ((WShoutUnlockButton) widget).getShout().getCost());
+            widget.tick();
+        });
+    }
+
+    static class WColorButton extends WButton {
         private static final Identifier DARK_WIDGETS_LOCATION = new Identifier("libgui", "textures/widget/dark_widgets.png");
         private static final int BUTTON_HEIGHT = 20;
         private static final int ICON_SPACING = 2;
@@ -193,5 +202,17 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         }
 
         public void setColor(int color) { this.color = color; }
+    }
+
+    static class WShoutUnlockButton extends WButton {
+        private final int shout;
+
+        public WShoutUnlockButton(int shoutOrdinal, @Nullable Icon icon) {
+            super(icon);
+            this.shout = shoutOrdinal;
+        }
+
+        public ShoutHandler.Shout getShout() { return ShoutHandler.Shout.fromOrdinal(this.shout); }
+        public int getOrdinal() { return this.shout; }
     }
 }

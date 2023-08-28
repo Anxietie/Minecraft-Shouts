@@ -1,6 +1,7 @@
 package com.mod.anxshouts.networking;
 
 import com.mod.anxshouts.networking.packet.*;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 
@@ -21,7 +22,5 @@ public class ModPackets {
         ServerPlayNetworking.registerGlobalReceiver(SOUL_COUNT_ID, SoulCountC2SPacket::receive);
     }
 
-    public static void registerS2CPackets() {
-
-    }
+    public static void registerS2CPackets() {}
 }

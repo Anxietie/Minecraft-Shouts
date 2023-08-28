@@ -4,6 +4,8 @@
   "category.anxshouts.shout.shout_controls": "Minecraft Shouts",
   "commands.anxshouts.shout.invalid_source": "INVALID COMMAND SOURCE",
   "commands.anxshouts.shout.invalid_argument": "INVALID ARGUMENT",
+  "block.anxshouts.word_block": "Word of Power",
+  "subtitle.anxshouts.absorb_soul": "Soul absorbed",
   "subtitle.anxshouts.unrelenting_force": "Unrelenting Force",
   "subtitle.anxshouts.fire_breath": "Fire Breath",
   "subtitle.anxshouts.frost_breath": "Frost Breath",

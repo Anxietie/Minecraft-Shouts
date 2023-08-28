@@ -3,6 +3,8 @@ package com.mod.anxshouts;
 import com.mod.anxshouts.events.EntityDeathEvent;
 import com.mod.anxshouts.events.ServerTickEvent;
 import com.mod.anxshouts.networking.ModPackets;
+import com.mod.anxshouts.registry.BlockRegister;
+import com.mod.anxshouts.registry.ItemRegister;
 import com.mod.anxshouts.registry.SoundRegister;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -28,5 +30,11 @@ public class MinecraftShouts implements ModInitializer {
         ServerTickEvent.registerServerTicks();
         EntityDeathEvent.registerEntityDeaths();
         LOGGER.info("Shouts events registered");
+
+        BlockRegister.registerBlocks();
+        LOGGER.info("Shouts blocks registered");
+
+        ItemRegister.registerItems();
+        LOGGER.info("Shouts items registered");
     }
 }

@@ -28,5 +28,11 @@
     "sounds": [
       "anxshouts:storm_call"
     ]
+  },
+  "absorb_soul": {
+    "subtitle": "subtitle.anxshouts.absorb_soul",
+    "sounds": [
+      "anxshouts:absorb_soul"
+    ]
   }
 }

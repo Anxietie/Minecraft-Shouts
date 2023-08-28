@@ -50,7 +50,7 @@ public class ShoutHandler {
         NONE("none", 0, null),
         FIRE("fire", 2, ParticleTypes.FLAME),
         FROST("frost", 1, ParticleTypes.SNOWFLAKE),
-        FORCE("force", 2, ParticleTypes.BUBBLE),
+        FORCE("force", 2, ParticleTypes.DRAGON_BREATH),
         AURA("aura", 1, ParticleTypes.ENCHANT),
         STORM("storm", 2, ParticleTypes.CRIT);
 

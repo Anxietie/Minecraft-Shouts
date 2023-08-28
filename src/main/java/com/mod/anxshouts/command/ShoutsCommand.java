@@ -2,6 +2,7 @@ package com.mod.anxshouts.command;
 
 import com.mod.anxshouts.client.util.ShoutHandler;
 import com.mod.anxshouts.command.arguments.ShoutArgumentType;
+import com.mod.anxshouts.command.arguments.ShoutEnumArgumentType;
 import com.mod.anxshouts.components.IShout;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -16,12 +17,12 @@ import static net.minecraft.command.argument.EntityArgumentType.getPlayer;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
 
-public class ShoutCommand {
+public class ShoutsCommand {
 	private static final SimpleCommandExceptionType INVALID_SOURCE = new SimpleCommandExceptionType(Text.translatable("commands.anxshouts.shout.invalid_source"));
 	private static final SimpleCommandExceptionType INVALID_ARGUMENT = new SimpleCommandExceptionType(Text.translatable("commands.anxshouts.shout.invalid_argument"));
 
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
-		dispatcher.register(literal("shout")
+		dispatcher.register(literal("shouts")
 				.requires(source -> source.hasPermissionLevel(2))
 				.then(argument("player", EntityArgumentType.player())
 						.then(literal("give")
@@ -35,8 +36,8 @@ public class ShoutCommand {
 								)
 						)
 						.then(literal("set")
-								.then(argument("shout", ShoutArgumentType.shout())
-										.executes(ctx -> setSelectedShout(getPlayer(ctx, "player"), ShoutArgumentType.getShout(ctx, "shout")))
+								.then(argument("shout", ShoutEnumArgumentType.shout())
+										.executes(ctx -> setSelectedShout(getPlayer(ctx, "player"), ShoutEnumArgumentType.getShout(ctx, "shout")))
 								)
 						)
 						.then(literal("unlock")
@@ -73,13 +74,10 @@ public class ShoutCommand {
         return Command.SINGLE_SUCCESS;
 	}
 
-	private static int setSelectedShout(ServerPlayerEntity player, String shout) throws CommandSyntaxException {
+	private static int setSelectedShout(ServerPlayerEntity player, ShoutHandler.Shout shout) throws CommandSyntaxException {
 		if (player == null)
 			throw INVALID_SOURCE.create();
-		if (shout.equals("all"))
-			throw INVALID_ARGUMENT.create();
-		else
-			IShout.KEY.get(player).setSelectedShout(ShoutHandler.Shout.byId(shout).ordinal());
+		IShout.KEY.get(player).setSelectedShout(shout.ordinal());
 		return Command.SINGLE_SUCCESS;
 	}
 

@@ -1,7 +1,9 @@
 package com.mod.anxshouts.registry;
 
-import com.mod.anxshouts.command.ShoutCommand;
+import com.mod.anxshouts.command.ShoutsCommand;
+import com.mod.anxshouts.command.SoulsCommand;
 import com.mod.anxshouts.command.arguments.ShoutArgumentType;
+import com.mod.anxshouts.command.arguments.ShoutEnumArgumentType;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
@@ -21,7 +23,8 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 public class CommandRegister {
     public static void commandCallback() {
         CommandRegistrationCallback.EVENT.register(CommandRegister::register);
-        registerArgType("shout", ShoutArgumentType.class, ConstantArgumentSerializer.of(ShoutArgumentType::shout));
+        registerArgType("shout_all", ShoutArgumentType.class, ConstantArgumentSerializer.of(ShoutArgumentType::shout));
+        registerArgType("shout_strict", ShoutEnumArgumentType.class, ConstantArgumentSerializer.of(ShoutEnumArgumentType::shout));
     }
 
     private static void registerArgType(String id, Class<? extends ArgumentType> argumentTypeClass, ArgumentSerializer serializer) {
@@ -36,6 +39,7 @@ public class CommandRegister {
     }
 
     private static void register(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registryAccess, CommandManager.RegistrationEnvironment registrationEnvironment) {
-        ShoutCommand.register(dispatcher);
+        ShoutsCommand.register(dispatcher);
+        SoulsCommand.register(dispatcher);
     }
 }
