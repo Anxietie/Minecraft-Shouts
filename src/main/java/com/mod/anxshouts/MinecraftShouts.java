@@ -35,6 +35,7 @@ public class MinecraftShouts implements ModInitializer {
         LOGGER.info("Shouts blocks registered");
 
         ItemRegister.registerItems();
+        ItemRegister.registerItemGroups();
         LOGGER.info("Shouts items registered");
     }
 }

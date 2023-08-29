@@ -1,0 +1,6 @@
+{
+	"parent": "anxshouts:block/word_of_power",
+	"textures": {
+		"texture": "anxshouts:block/word_of_power_w"
+	}
+}

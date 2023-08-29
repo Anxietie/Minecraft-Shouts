@@ -1,8 +1,7 @@
 {
 	"ambientocclusion": false,
 	"textures": {
-		"particle": "anxshouts:block/word_block",
-		"texture": "anxshouts:block/word_block"
+		"particle": "#texture"
 	},
 	"elements": [
 		{   "from": [  0, 0.25,  0 ],

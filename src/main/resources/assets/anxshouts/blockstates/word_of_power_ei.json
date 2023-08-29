@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "anxshouts:block/word_of_power_ei",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "anxshouts:block/word_of_power_ei",
+      "x": -90,
+      "y": -90
+    },
+    "facing=north": {
+      "model": "anxshouts:block/word_of_power_ei",
+      "x": -90,
+      "y": 180
+    },
+    "facing=south": {
+      "model": "anxshouts:block/word_of_power_ei",
+      "x": -90
+    },
+    "facing=up": {
+      "model": "anxshouts:block/word_of_power_ei"
+    },
+    "facing=west": {
+      "model": "anxshouts:block/word_of_power_ei",
+      "x": -90,
+      "y": 90
+    }
+  }
+}

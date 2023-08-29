@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:item/generated",
+	"textures": {
+		"layer0": "anxshouts:block/word_of_power_oo"
+	}
+}
