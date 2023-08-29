@@ -6,7 +6,7 @@ import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.server.command.ServerCommandSource;
 
 public class ShoutEnumArgumentType extends EnumArgumentType<ShoutHandler.Shout> {
-    protected ShoutEnumArgumentType() { super(ShoutHandler.Shout.CODEC, ShoutHandler.Shout::values); }
+    public ShoutEnumArgumentType() { super(ShoutHandler.Shout.CODEC, ShoutHandler.Shout::values); }
 
     public static EnumArgumentType<ShoutHandler.Shout> shout() {
         return new ShoutEnumArgumentType();
