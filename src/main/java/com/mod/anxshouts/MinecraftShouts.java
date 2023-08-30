@@ -1,5 +1,6 @@
 package com.mod.anxshouts;
 
+import com.mod.anxshouts.events.AdvancementMadeEvent;
 import com.mod.anxshouts.events.EntityDeathEvent;
 import com.mod.anxshouts.events.ServerTickEvent;
 import com.mod.anxshouts.networking.ModPackets;
@@ -29,6 +30,7 @@ public class MinecraftShouts implements ModInitializer {
 
         ServerTickEvent.registerServerTicks();
         EntityDeathEvent.registerEntityDeaths();
+        AdvancementMadeEvent.registerAdvancements();
         LOGGER.info("Shouts events registered");
 
         BlockRegister.registerBlocks();
