@@ -1,0 +1,3 @@
+fix unlocking system
+add more shouts
+fix word wall structure spawning

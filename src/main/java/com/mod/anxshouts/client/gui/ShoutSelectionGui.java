@@ -25,7 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.mod.anxshouts.MinecraftShouts.MODID;
 
-// TODO: fix obtaining system
 public class ShoutSelectionGui extends LightweightGuiDescription {
     WColorButton selectedShoutBuffer = null;
 

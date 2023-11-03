@@ -18,6 +18,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.StringIdentifiable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 @Environment(EnvType.CLIENT)
 public class ShoutHandler {
     public static void keyCallback() {
@@ -35,7 +37,7 @@ public class ShoutHandler {
                     return;
                 }
 
-                ModUtils.emitParticles(player, 20);
+                emitParticles(player, 20);
 
                 ClientPlayNetworking.send(ModPackets.ACTION_SHOUT_ID, PacketByteBufs.create());
             }
@@ -44,6 +46,21 @@ public class ShoutHandler {
                     client.send(() -> client.setScreen(new ShoutSelectionScreen(new ShoutSelectionGui(player))));
             }
         });
+    }
+
+    private static void emitParticles(ClientPlayerEntity player, int count) {
+        ParticleEffect particleEffect = ShoutHandler.Shout.fromOrdinal(IShout.KEY.get(player).getSelectedShout()).getParticleEffect();
+        if (particleEffect == null) return;
+
+        Random random = new Random();
+        final double SPREAD = 0.6; // affects spread
+
+        double velocityX = Math.cos(ModUtils.convertYaw(player.getHeadYaw()) + (Math.PI/2));
+        double velocityZ = Math.sin(ModUtils.convertYaw(player.getHeadYaw()) + (Math.PI/2));
+        double velocityY = Math.sin(Math.toRadians(-player.getPitch()));
+        for (int i = 0; i < count; i++)
+            // (SPREAD * (2 * random.nextDouble() - 1)) makes the particles deviate off their path by a value between -1 and 1
+            player.getWorld().addParticle(particleEffect, player.getX(), player.getEyeY(), player.getZ(), velocityX + (SPREAD * (2 * random.nextDouble() - 1)), velocityY + (SPREAD * (2 * random.nextDouble() - 1)), velocityZ + (SPREAD * (2 * random.nextDouble() - 1)));
     }
 
     public enum Shout implements StringIdentifiable {

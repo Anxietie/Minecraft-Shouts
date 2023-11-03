@@ -7,7 +7,6 @@ import net.minecraft.util.Identifier;
 
 import static com.mod.anxshouts.MinecraftShouts.MODID;
 
-// TODO: add dragon soul count system
 public interface IShout extends ComponentV3 {
     ComponentKey<IShout> KEY = ComponentRegistryV3.INSTANCE.getOrCreate(new Identifier(MODID, "shouts"), IShout.class);
 
