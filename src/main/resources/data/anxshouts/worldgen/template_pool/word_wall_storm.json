@@ -1,12 +1,12 @@
 {
-  "name": "anxshouts:word_wall_fire_breath",
+  "name": "anxshouts:word_wall_storm",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "anxshouts:word_wall_fire_breath",
+        "location": "anxshouts:word_wall_storm",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }

@@ -7,23 +7,23 @@
   },
   "structures": [
     {
-      "structure": "anxshouts:word_wall_unrelenting_force",
+      "structure": "anxshouts:word_wall_force",
       "weight": 1
     },
     {
-      "structure": "anxshouts:word_wall_fire_breath",
+      "structure": "anxshouts:word_wall_fire",
       "weight": 1
     },
     {
-      "structure": "anxshouts:word_wall_frost_breath",
+      "structure": "anxshouts:word_wall_frost",
       "weight": 1
     },
     {
-      "structure": "anxshouts:word_wall_aura_whisper",
+      "structure": "anxshouts:word_wall_aura",
       "weight": 1
     },
     {
-      "structure": "anxshouts:word_wall_storm_call",
+      "structure": "anxshouts:word_wall_storm",
       "weight": 1
     }
   ]

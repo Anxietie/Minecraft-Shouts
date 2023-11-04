@@ -1,12 +1,12 @@
 {
-  "name": "anxshouts:word_wall_unrelenting_force",
+  "name": "anxshouts:word_wall_fire",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "anxshouts:word_wall_unrelenting_force",
+        "location": "anxshouts:word_wall_fire",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }

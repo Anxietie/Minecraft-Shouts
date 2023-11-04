@@ -1,12 +1,12 @@
 {
-  "name": "anxshouts:word_wall_frost_breath",
+  "name": "anxshouts:word_wall_frost",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "anxshouts:word_wall_frost_breath",
+        "location": "anxshouts:word_wall_frost",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }

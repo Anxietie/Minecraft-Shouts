@@ -1,12 +1,12 @@
 {
-  "name": "anxshouts:word_wall_storm_call",
+  "name": "anxshouts:word_wall_aura",
   "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "anxshouts:word_wall_storm_call",
+        "location": "anxshouts:word_wall_aura",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }

@@ -12,7 +12,7 @@
     "absolute": 0
   },
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
-  "start_pool": "anxshouts:word_wall_storm_call",
+  "start_pool": "anxshouts:word_wall_fire",
   "step": "surface_structures",
   "terrain_adaptation": "beard_thin",
   "use_expansion_hack": false
