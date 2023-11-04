@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:story/root",
   "criteria": {
-    "word_wall": {
+    "word_wall_unrelenting_force": {
       "conditions": {
         "player": [
           {
@@ -9,7 +9,7 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structure": "anxshouts:word_wall"
+                "structure": "anxshouts:word_wall_unrelenting_force"
               }
             }
           }
@@ -21,7 +21,7 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "advancements.anxshouts.find_word_wall"
+      "translate": "advancements.anxshouts.find_word_wall_unrelenting_force"
     },
     "frame": "task",
     "hidden": true,
@@ -30,12 +30,12 @@
     },
     "show_toast": false,
     "title": {
-      "translate": "advancements.anxshouts.find_word_wall.title"
+      "translate": "advancements.anxshouts.find_word_wall_unrelenting_force.title"
     }
   },
   "requirements": [
     [
-      "word_wall"
+      "word_wall_unrelenting_force"
     ]
   ],
   "sends_telemetry_event": false

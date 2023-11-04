@@ -1,30 +1,57 @@
 {
-  "variants": {
-    "facing=down": {
-      "model": "anxshouts:block/word_of_power_m",
-      "x": 180
-    },
-    "facing=east": {
-      "model": "anxshouts:block/word_of_power_m",
-      "x": -90,
-      "y": -90
-    },
-    "facing=north": {
-      "model": "anxshouts:block/word_of_power_m",
-      "x": -90,
-      "y": 180
-    },
-    "facing=south": {
-      "model": "anxshouts:block/word_of_power_m",
-      "x": -90
-    },
-    "facing=up": {
-      "model": "anxshouts:block/word_of_power_m"
-    },
-    "facing=west": {
-      "model": "anxshouts:block/word_of_power_m",
-      "x": -90,
-      "y": 90
-    }
-  }
+	"variants": {
+		"face=ceiling,facing=east": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": 180,
+			"y": 90
+		},
+		"face=ceiling,facing=north": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": 180
+		},
+		"face=ceiling,facing=south": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": 180,
+			"y": 180
+		},
+		"face=ceiling,facing=west": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": 180,
+			"y": -90
+		},
+		"face=floor,facing=east": {
+			"model": "anxshouts:block/word_of_power_m",
+			"y": 90
+		},
+		"face=floor,facing=north": {
+			"model": "anxshouts:block/word_of_power_m"
+		},
+		"face=floor,facing=south": {
+			"model": "anxshouts:block/word_of_power_m",
+			"y": 180
+		},
+		"face=floor,facing=west": {
+			"model": "anxshouts:block/word_of_power_m",
+			"y": -90
+		},
+		"face=wall,facing=east": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": -90,
+			"y": -90
+		},
+		"face=wall,facing=north": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": -90,
+			"y": 180
+		},
+		"face=wall,facing=south": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": -90
+		},
+		"face=wall,facing=west": {
+			"model": "anxshouts:block/word_of_power_m",
+			"x": -90,
+			"y": 90
+		}
+	}
 }
