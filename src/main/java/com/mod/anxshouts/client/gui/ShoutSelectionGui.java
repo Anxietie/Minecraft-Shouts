@@ -43,7 +43,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
         for (int i = 1; i < ShoutHandler.Shout.values().length; i++) {
             ShoutHandler.Shout shout = ShoutHandler.Shout.fromOrdinal(i);
-            if (shout == ShoutHandler.Shout.NONE) continue;
+            // if (shout == ShoutHandler.Shout.NONE) continue;
             if (!data.hasUnlockedShout(i)) continue;
 
             WColorButton shoutSelector = createShoutSelectionButton(data, shout);
@@ -76,10 +76,10 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         ClientPlayNetworking.send(channel, buf);
     }
 
-    private void sendSoulsPacket(Identifier channel, int souls) {
+    private void sendSoulsPacket(int souls) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(souls);
-        ClientPlayNetworking.send(channel, buf);
+        ClientPlayNetworking.send(ModPackets.SOUL_COUNT_ID, buf);
     }
 
     private WColorButton createShoutSelectionButton(IShout data, ShoutHandler.Shout shout) {
@@ -131,23 +131,24 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         unlocker.setEnabled(!data.hasObtainedShout(ordinal) && data.getSoulCount() >= shout.getCost());
         unlocker.setOnClick(() -> {
             data.obtainShout(ordinal);
-            sendSoulsPacket(ModPackets.SOUL_COUNT_ID, data.getSoulCount() - shout.getCost());
+            sendSoulsPacket(data.getSoulCount() - shout.getCost());
             sendShoutPacket(ModPackets.OBTAIN_SHOUT_ID, ordinal);
             soulsCount.setText(Text.literal("Souls: " + (data.getSoulCount() - shout.getCost())));
             unlocker.setEnabled(false);
             shoutSelector.setEnabled(true);
             shoutSelector.tick();
             soulsCount.tick();
-            tickAllUnlockers(data, unlockBox, shout);
+            tickAllUnlockers(data, unlockBox, shout.getCost());
         });
 
         return unlocker;
     }
 
-    private void tickAllUnlockers(IShout data, WBox unlockBox, ShoutHandler.Shout shout) {
+    private void tickAllUnlockers(IShout data, WBox unlockBox, int cost) {
         unlockBox.streamChildren().forEach(widget -> {
-            ((WShoutUnlockButton) widget).setEnabled(data.getSoulCount() - shout.getCost() >= ((WShoutUnlockButton) widget).getShout().getCost());
+            ((WShoutUnlockButton) widget).setEnabled(data.getSoulCount() - cost >= ((WShoutUnlockButton) widget).getShout().getCost());
             widget.tick();
+            widget.tick(); // need to tick twice for whatever reason so it doesnt get fucked up while the gui is still open
         });
     }
 
@@ -212,6 +213,6 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         }
 
         public ShoutHandler.Shout getShout() { return ShoutHandler.Shout.fromOrdinal(this.shout); }
-        public int getOrdinal() { return this.shout; }
+        // public int getOrdinal() { return this.shout; }
     }
 }
