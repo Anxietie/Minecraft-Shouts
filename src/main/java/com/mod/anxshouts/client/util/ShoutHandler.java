@@ -69,7 +69,9 @@ public class ShoutHandler {
         FROST("frost", 1, ParticleTypes.SNOWFLAKE),
         FORCE("force", 2, ParticleTypes.DRAGON_BREATH),
         AURA("aura", 1, ParticleTypes.ENCHANT),
-        STORM("storm", 2, ParticleTypes.CRIT);
+        STORM("storm", 2, ParticleTypes.CRIT),
+        CLEAR("clear", 1, ParticleTypes.SNOWFLAKE),
+        DISARM("disarm", 2, ParticleTypes.EFFECT);
 
         public static final Codec<Shout> CODEC;
         private final String id;

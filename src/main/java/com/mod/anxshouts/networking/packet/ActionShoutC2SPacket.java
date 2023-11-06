@@ -5,13 +5,12 @@ import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.registry.SoundRegister;
 import com.mod.anxshouts.util.ModUtils;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LightningEntity;
-import net.minecraft.entity.LivingEntity;
+import net.minecraft.client.sound.Sound;
+import net.minecraft.entity.*;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -81,6 +80,17 @@ public class ActionShoutC2SPacket {
         });
     }
 
+    private static ItemEntity dropStack(Entity e, ItemStack stack, int yOffset) {
+        if (stack.isEmpty())
+            return null;
+        if (e.getWorld().isClient)
+            return null;
+        ItemEntity itemEntity = new ItemEntity(e.getWorld(), e.getX(), e.getY() + (double)yOffset, e.getZ(), stack);
+        itemEntity.setToDefaultPickupDelay();
+        e.getWorld().spawnEntity(itemEntity);
+        return itemEntity;
+    }
+
     private static void handleShout(ServerPlayerEntity player, ShoutHandler.Shout shout) {
         float yaw = player.getHeadYaw();
 
@@ -133,6 +143,15 @@ public class ActionShoutC2SPacket {
                     }
                 }
                 player.playSound(SoundRegister.STORM_CALL, SoundCategory.PLAYERS, 0.5f, 1.0f);
+            }
+            case CLEAR -> {
+                player.getServerWorld().setWeather(1200, 0, false, false); // 1200 seconds is 1 minecraft day
+                player.playSound(SoundRegister.UNRELENTING_FORCE, SoundCategory.PLAYERS, 0.5f, 1.0f); // unrelenting force is generic shout sound
+            }
+            case DISARM -> {
+                for (Entity e : entities)
+                    dropStack(e, ((LivingEntity) e).getMainHandStack().copyAndEmpty(), 2);
+                player.playSound(SoundRegister.DISARM, SoundCategory.PLAYERS, 0.5f, 1.0f);
             }
             default -> {}
         }

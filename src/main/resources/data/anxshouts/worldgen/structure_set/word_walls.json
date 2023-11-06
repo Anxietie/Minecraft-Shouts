@@ -25,6 +25,14 @@
     {
       "structure": "anxshouts:word_wall_storm",
       "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_clear",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_disarm",
+      "weight": 1
     }
   ]
 }

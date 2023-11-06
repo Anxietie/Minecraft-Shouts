@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:story/root",
+  "criteria": {
+    "word_wall_disarm": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structure": "anxshouts:word_wall_disarm"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.anxshouts.find_word_wall_disarm"
+    },
+    "frame": "task",
+    "hidden": true,
+    "icon": {
+      "item": "anxshouts:word_of_power_a"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancements.anxshouts.find_word_wall_disarm.title"
+    }
+  },
+  "requirements": [
+    [
+      "word_wall_disarm"
+    ]
+  ],
+  "sends_telemetry_event": false
+}

@@ -1,32 +1,38 @@
 {
-  "unrelenting_force": {
-    "subtitle": "subtitle.anxshouts.unrelenting_force",
+  "force": {
+    "subtitle": "subtitle.anxshouts.force",
     "sounds": [
-      "anxshouts:unrelenting_force"
+      "anxshouts:force"
     ]
   },
-  "fire_breath": {
-    "subtitle": "subtitle.anxshouts.fire_breath",
+  "fire": {
+    "subtitle": "subtitle.anxshouts.fire",
     "sounds": [
-      "anxshouts:fire_breath"
+      "anxshouts:fire"
     ]
   },
-  "frost_breath": {
-    "subtitle": "subtitle.anxshouts.frost_breath",
+  "frost": {
+    "subtitle": "subtitle.anxshouts.frost",
     "sounds": [
-      "anxshouts:frost_breath"
+      "anxshouts:frost"
     ]
   },
-  "aura_whisper": {
-    "subtitle": "subtitle.anxshouts.aura_whisper",
+  "aura": {
+    "subtitle": "subtitle.anxshouts.aura",
     "sounds": [
-      "anxshouts:aura_whisper"
+      "anxshouts:aura"
     ]
   },
-  "storm_call": {
-    "subtitle": "subtitle.anxshouts.storm_call",
+  "storm": {
+    "subtitle": "subtitle.anxshouts.storm",
     "sounds": [
-      "anxshouts:storm_call"
+      "anxshouts:storm"
+    ]
+  },
+  "disarm": {
+    "subtitle": "subtitle.anxshouts.disarm",
+    "sounds": [
+      "anxshouts:disarm"
     ]
   },
   "absorb_soul": {
