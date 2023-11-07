@@ -49,7 +49,8 @@ public class ShoutHandler {
     }
 
     private static void emitParticles(ClientPlayerEntity player, int count) {
-        ParticleEffect particleEffect = ShoutHandler.Shout.fromOrdinal(IShout.KEY.get(player).getSelectedShout()).getParticleEffect();
+        Shout shout = ShoutHandler.Shout.fromOrdinal(IShout.KEY.get(player).getSelectedShout());
+        ParticleEffect particleEffect = shout.getParticleEffect();
         if (particleEffect == null) return;
 
         Random random = new Random();
@@ -70,8 +71,15 @@ public class ShoutHandler {
         FORCE("force", 2, ParticleTypes.DRAGON_BREATH),
         AURA("aura", 1, ParticleTypes.ENCHANT),
         STORM("storm", 2, ParticleTypes.CRIT),
-        CLEAR("clear", 1, ParticleTypes.SNOWFLAKE),
-        DISARM("disarm", 2, ParticleTypes.EFFECT);
+        CLEAR("clear", 1, null),
+        DISARM("disarm", 2, null),
+        ETHEREAL("ethereal", 2, ParticleTypes.EFFECT),
+        DRAIN("drain", 1, null),
+        ICE("ice", 1, ParticleTypes.SNOWFLAKE),
+        SPRINT("sprint", 1, ParticleTypes.FLASH),
+        VALOR("valor", 2, null),
+        ASPECT("aspect", 3, ParticleTypes.EFFECT),
+        REND("rend", 3, ParticleTypes.DRAGON_BREATH);
 
         public static final Codec<Shout> CODEC;
         private final String id;

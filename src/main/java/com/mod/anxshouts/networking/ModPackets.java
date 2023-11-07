@@ -15,6 +15,8 @@ public class ModPackets {
     public static final Identifier SET_COOLDOWN_SHOUT_ID = new Identifier(MODID, "shout_cooldown_set");
     public static final Identifier SOUL_COUNT_ID = new Identifier(MODID, "soul_count");
 
+    public static final Identifier KNOCKBACK_ID = new Identifier(MODID, "knockback");
+
     public static void registerC2SPackets() {
         ServerPlayNetworking.registerGlobalReceiver(ACTION_SHOUT_ID, ActionShoutC2SPacket::receive);
         ServerPlayNetworking.registerGlobalReceiver(SELECT_SHOUT_ID, SelectShoutC2SPacket::receive);
@@ -24,5 +26,7 @@ public class ModPackets {
         ServerPlayNetworking.registerGlobalReceiver(SOUL_COUNT_ID, SoulCountC2SPacket::receive);
     }
 
-    public static void registerS2CPackets() {}
+    public static void registerS2CPackets() {
+        ClientPlayNetworking.registerGlobalReceiver(KNOCKBACK_ID, KnockbackS2CPacket::receive);
+    }
 }

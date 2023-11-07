@@ -35,6 +35,48 @@
       "anxshouts:disarm"
     ]
   },
+  "ethereal": {
+    "subtitle": "subtitle.anxshouts.ethereal",
+    "sounds": [
+      "anxshouts:ethereal"
+    ]
+  },
+  "drain": {
+    "subtitle": "subtitle.anxshouts.drain",
+    "sounds": [
+      "anxshouts:drain"
+    ]
+  },
+  "ice": {
+    "subtitle": "subtitle.anxshouts.ice",
+    "sounds": [
+      "anxshouts:ice"
+    ]
+  },
+  "sprint": {
+    "subtitle": "subtitle.anxshouts.sprint",
+    "sounds": [
+      "anxshouts:sprint"
+    ]
+  },
+  "valor": {
+    "subtitle": "subtitle.anxshouts.valor",
+    "sounds": [
+      "anxshouts:valor"
+    ]
+  },
+  "aspect": {
+    "subtitle": "subtitle.anxshouts.aspect",
+    "sounds": [
+      "anxshouts:aspect"
+    ]
+  },
+  "rend": {
+    "subtitle": "subtitle.anxshouts.rend",
+    "sounds": [
+      "anxshouts:rend"
+    ]
+  },
   "absorb_soul": {
     "subtitle": "subtitle.anxshouts.absorb_soul",
     "sounds": [

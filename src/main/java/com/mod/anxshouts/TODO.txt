@@ -7,10 +7,6 @@
         frost resistance
         more powerful shouts (use modifier)
         lower shout cooldown when active (use inverse modifier)
-    become ethereal:
-        cancel attack in AttackEntityCallback.EVENT (cannot harm)
-        turn player invisible (mobs cant see)
-        give resistance a million (cannot be harmed)
     drain vitality:
         loop thru nearby hostiles and damage them and heal player
     ice form:

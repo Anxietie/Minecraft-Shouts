@@ -5,6 +5,8 @@ import dev.onyxstudios.cca.api.v3.component.ComponentRegistryV3;
 import dev.onyxstudios.cca.api.v3.component.ComponentV3;
 import net.minecraft.util.Identifier;
 
+import java.util.UUID;
+
 import static com.mod.anxshouts.MinecraftShouts.MODID;
 
 public interface IShout extends ComponentV3 {
@@ -32,5 +34,14 @@ public interface IShout extends ComponentV3 {
     void incrementSoulCount();
     void setSoulCount(int souls);
     void decrementSoulCount();
+    void setEtherealTicks(int ticks);
+    void decrementEtherealTicks();
+    boolean isEthereal();
+    void setValorTicks(int ticks);
+    int getValorTicks();
+    int decrementValorTicks();
+    boolean hasActiveValor();
+    void setValorUUID(UUID uuid);
+    UUID getValorUUID();
 }
 

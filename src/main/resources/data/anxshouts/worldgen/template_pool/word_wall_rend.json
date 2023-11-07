@@ -1,0 +1,15 @@
+{
+  "name": "anxshouts:word_wall_rend",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "anxshouts:word_wall_rend",
+        "projection": "rigid",
+        "processors": "minecraft:empty"
+      }
+    }
+  ]
+}

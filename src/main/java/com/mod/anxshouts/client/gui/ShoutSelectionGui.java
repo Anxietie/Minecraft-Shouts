@@ -65,7 +65,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         scrollPanel.setScrollingHorizontally(TriState.FALSE);
 
         root.add(soulsCount, 0, 0);
-        root.add(scrollPanel, 0, 1, 10, 10);
+        root.add(scrollPanel, 0, 1, 11, 10);
 
         root.validate(this);
     }

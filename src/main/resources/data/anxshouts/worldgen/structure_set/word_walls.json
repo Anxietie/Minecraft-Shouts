@@ -33,6 +33,34 @@
     {
       "structure": "anxshouts:word_wall_disarm",
       "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_ethereal",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_drain",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_ice",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_sprint",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_valor",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_aspect",
+      "weight": 1
+    },
+    {
+      "structure": "anxshouts:word_wall_rend",
+      "weight": 1
     }
   ]
 }
