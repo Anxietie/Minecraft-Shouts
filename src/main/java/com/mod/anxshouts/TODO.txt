@@ -1,17 +1,3 @@
 -add more shouts-
     dragon aspect:
-        give player glowing (dragon armor lol)
-        one day cooldown (separate counter)
         summon skeleton to fight for player once health drops below 50% (use damage callback probably)
-        fire resistance
-        frost resistance
-        more powerful shouts (use modifier)
-        lower shout cooldown when active (use inverse modifier)
-    drain vitality:
-        loop thru nearby hostiles and damage them and heal player
-    ice form:
-        give enemy slowness a million
-    whirlwind sprint:
-        apply knockback in the direction the player is looking
-    call of valor:
-        spawn wolves to fight for player (apply special nbt to kill them after time passed in tick method)

@@ -3,9 +3,7 @@ package com.mod.anxshouts.events;
 import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.util.ModUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 
 public class ServerTickEvent {
     public static void registerServerTicks() {
@@ -22,6 +20,14 @@ public class ServerTickEvent {
                         data.setValorUUID(null);
                     }
                 }
+                if (data.hasActiveDA()) {
+                    if (data.decrementDATicks() == 0) {
+                        ModUtils.killCompanions(server, player);
+                        data.setCompanionUUID(null);
+                    }
+                }
+                if (data.getDACooldown() > 0)
+                    data.decrementDACooldown();
             }
         });
     }

@@ -1,6 +1,6 @@
 package com.mod.anxshouts.components;
 
-import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.client.ShoutHandler;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -18,7 +18,10 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
     protected int souls;
     protected int etherealTicks;
     protected int valorTicks;
+    protected int dragonAspectCooldown;
+    protected int dragonAspectTicks;
     protected UUID valorUUID = null;
+    protected UUID aspectUUID = null;
     private final Object provider;
 
     public PlayerShout(PlayerEntity provider) {
@@ -30,6 +33,8 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
         this.souls = 0;
         this.etherealTicks = 0;
         this.valorTicks = 0;
+        this.dragonAspectCooldown = 0;
+        this.dragonAspectTicks = 0;
     }
 
     @Override
@@ -189,6 +194,59 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
     }
 
     @Override
+    public boolean hasActiveDA() {
+        return this.dragonAspectTicks > 0;
+    }
+
+    @Override
+    public int getDATicks() {
+        return this.dragonAspectTicks;
+    }
+
+    @Override
+    public void setDATicks(int ticks) {
+        this.dragonAspectTicks = ticks;
+        sync();
+    }
+
+    @Override
+    public int decrementDATicks() {
+        setDATicks(this.dragonAspectTicks - 1);
+        return this.dragonAspectTicks;
+    }
+
+    @Override
+    public int getDACooldown() {
+        return this.dragonAspectCooldown;
+    }
+
+    @Override
+    public void setDACooldown(int ticks) {
+        this.dragonAspectCooldown = ticks;
+        sync();
+    }
+
+    @Override
+    public boolean companionSummoned() {
+        return this.aspectUUID != null;
+    }
+
+    @Override
+    public void setCompanionUUID(UUID uuid) {
+        this.aspectUUID = uuid;
+    }
+
+    @Override
+    public UUID getCompanionUUID() {
+        return this.aspectUUID;
+    }
+
+    @Override
+    public void decrementDACooldown() {
+        setDACooldown(this.dragonAspectTicks - 1);
+    }
+
+    @Override
     public void readFromNbt(NbtCompound nbt) {
         this.selectedShout = nbt.getInt("SelectedShout");
         this.unlockedShouts = nbt.getIntArray("UnlockedShouts");
@@ -197,6 +255,8 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
         this.souls = nbt.getInt("SoulCount");
         this.etherealTicks = nbt.getInt("EtherealTicks");
         this.valorTicks = nbt.getInt("ValorTicks");
+        this.dragonAspectCooldown = nbt.getInt("DragonAspectCooldown");
+        this.dragonAspectTicks = nbt.getInt("DragonAspectTicks");
     }
 
     @Override
@@ -208,6 +268,8 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
         nbt.putInt("SoulCount", this.souls);
         nbt.putInt("EtherealTicks", this.etherealTicks);
         nbt.putInt("ValorTicks", this.valorTicks);
+        nbt.putInt("DragonAspectCooldown", this.dragonAspectCooldown);
+        nbt.putInt("DragonAspectTicks", this.dragonAspectTicks);
     }
 
     @Override
@@ -220,6 +282,8 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
         buf.writeInt(this.souls);
         buf.writeInt(this.etherealTicks);
         buf.writeInt(this.valorTicks);
+        buf.writeInt(this.dragonAspectCooldown);
+        buf.writeInt(this.dragonAspectTicks);
     }
 
     @Override
@@ -231,6 +295,8 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
         this.souls = buf.readInt();
         this.etherealTicks = buf.readInt();
         this.valorTicks = buf.readInt();
+        this.dragonAspectCooldown = buf.readInt();
+        this.dragonAspectTicks = buf.readInt();
     }
 
     @Override

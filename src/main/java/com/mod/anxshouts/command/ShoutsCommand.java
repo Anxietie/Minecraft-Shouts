@@ -1,6 +1,6 @@
 package com.mod.anxshouts.command;
 
-import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.client.ShoutHandler;
 import com.mod.anxshouts.command.arguments.ShoutArgumentType;
 import com.mod.anxshouts.command.arguments.ShoutEnumArgumentType;
 import com.mod.anxshouts.components.IShout;

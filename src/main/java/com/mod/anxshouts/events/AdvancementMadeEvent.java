@@ -1,6 +1,6 @@
 package com.mod.anxshouts.events;
 
-import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.client.ShoutHandler;
 import com.mod.anxshouts.networking.ModPackets;
 import com.mod.anxshouts.registry.SoundRegister;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

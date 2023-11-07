@@ -1,7 +1,7 @@
 package com.mod.anxshouts.command.arguments;
 
 import com.google.gson.JsonPrimitive;
-import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.client.ShoutHandler;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;

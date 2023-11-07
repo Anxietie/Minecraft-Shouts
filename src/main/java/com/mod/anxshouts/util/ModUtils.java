@@ -1,6 +1,7 @@
 package com.mod.anxshouts.util;
 
 import com.mod.anxshouts.components.IShout;
+import net.minecraft.entity.mob.SkeletonEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -16,6 +17,14 @@ public final class ModUtils {
             WolfEntity wolf = (WolfEntity) world.getEntity(IShout.KEY.get(player).getValorUUID());
             if (wolf != null)
                 wolf.discard();
+        }
+    }
+
+    public static void killCompanions(MinecraftServer server, PlayerEntity player) {
+        for (ServerWorld world : server.getWorlds()) {
+            SkeletonEntity skeleton = (SkeletonEntity) world.getEntity(IShout.KEY.get(player).getCompanionUUID());
+            if (skeleton != null)
+                skeleton.discard();
         }
     }
 }

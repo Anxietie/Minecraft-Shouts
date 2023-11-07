@@ -108,5 +108,6 @@
   "advancements.anxshouts.find_word_wall_rend.title": "Dragonrend",
   "subtitle.anxshouts.rend": "Dragonrend",
   "anxshouts.shouts.rend": "Dragonrend",
-  "anxshouts.shouts.rend.description": "Your Voice lashes out at a dragon's very soul, forcing the beast to land"
+  "anxshouts.shouts.rend.description": "Your Voice lashes out at a dragon's very soul, forcing the beast to land",
+  "effect.anxshouts.frost_resistance": "Frost Resistance"
 }

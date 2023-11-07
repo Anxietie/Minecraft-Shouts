@@ -1,6 +1,6 @@
 package com.mod.anxshouts.command.arguments;
 
-import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.client.ShoutHandler;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.command.argument.EnumArgumentType;
 import net.minecraft.server.command.ServerCommandSource;

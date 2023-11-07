@@ -27,10 +27,15 @@ public class EntityDeathEvent {
                 IShout data = IShout.KEY.get(entity);
                 data.setShoutCooldown(0);
                 data.setEtherealTicks(0);
+                data.setDATicks(0);
+                data.setDACooldown(0);
                 data.setValorTicks(0);
-                if (entity.getServer() != null)
+                if (entity.getServer() != null) {
                     ModUtils.killWolfSoldiers(entity.getServer(), (PlayerEntity) entity);
+                    ModUtils.killCompanions(entity.getServer(), (PlayerEntity) entity);
+                }
                 data.setValorUUID(null);
+                data.setCompanionUUID(null);
             }
         });
     }

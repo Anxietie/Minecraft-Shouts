@@ -43,5 +43,15 @@ public interface IShout extends ComponentV3 {
     boolean hasActiveValor();
     void setValorUUID(UUID uuid);
     UUID getValorUUID();
+    boolean hasActiveDA(); // DA = dragon aspect
+    int getDATicks();
+    void setDATicks(int ticks);
+    int decrementDATicks();
+    int getDACooldown();
+    void setDACooldown(int ticks);
+    void decrementDACooldown();
+    boolean companionSummoned();
+    UUID getCompanionUUID();
+    void setCompanionUUID(UUID uuid);
 }
 

@@ -1,7 +1,6 @@
 package com.mod.anxshouts.client;
 
 import com.mod.anxshouts.client.registry.KeybindRegister;
-import com.mod.anxshouts.client.util.ShoutHandler;
 import com.mod.anxshouts.networking.ModPackets;
 import com.mod.anxshouts.registry.BlockRegister;
 import com.mod.anxshouts.registry.CommandRegister;

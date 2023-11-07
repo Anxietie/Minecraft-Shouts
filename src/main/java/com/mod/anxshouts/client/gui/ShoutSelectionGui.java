@@ -1,6 +1,6 @@
 package com.mod.anxshouts.client.gui;
 
-import com.mod.anxshouts.client.util.ShoutHandler;
+import com.mod.anxshouts.client.ShoutHandler;
 import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.networking.ModPackets;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;

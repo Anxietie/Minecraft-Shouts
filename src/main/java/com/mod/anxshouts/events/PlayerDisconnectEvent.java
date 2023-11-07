@@ -7,8 +7,10 @@ import net.minecraft.entity.player.PlayerEntity;
 public class PlayerDisconnectEvent {
 	public static void registerDisconnectEvents() {
 		ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-			for (PlayerEntity player : server.getPlayerManager().getPlayerList())
+			for (PlayerEntity player : server.getPlayerManager().getPlayerList()) {
 				ModUtils.killWolfSoldiers(server, player);
+				ModUtils.killCompanions(server, player);
+			}
 		});
 	}
 }
