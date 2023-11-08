@@ -40,10 +40,11 @@ public class ActionShoutC2SPacket {
 
 		handleShout(player, shout);
 
-		player.sendMessage(Text.translatable("anxshouts.shouts." + shout.getId()), true);
-		if (shout == ShoutHandler.Shout.ASPECT && data.getDACooldown() > 0)
-			player.sendMessage(Text.literal("You've already used Dragon Aspect today!"), true);
-		data.setShoutCooldown((int)(shout.getCooldown() * 20 * (data.hasActiveDA() ? 0.8 : 1))); // converted from seconds to ticks
+		if (shout != ShoutHandler.Shout.ASPECT)
+			player.sendMessage(Text.translatable("anxshouts.shouts." + shout.getId()), true);
+		if (!player.interactionManager.getGameMode().isCreative()) {
+			data.setShoutCooldown((int) (shout.getCooldown() * 20 * (data.hasActiveDA() ? 0.8 : 1))); // converted from seconds to ticks
+		}
 	}
 
 	public static double getHorizontalDistanceFromPlayer(Entity e, PlayerEntity player) {
@@ -229,9 +230,12 @@ public class ActionShoutC2SPacket {
 			}
 			case ASPECT -> {
 				final int DURATION = 6000; // 6000 ticks = 300 seconds
-				if (data.getDACooldown() > 0) break;
+				if (data.getDACooldown() > 0)  {
+					player.sendMessage(Text.literal("You've already used Dragon Aspect today!"), true);
+					break;
+				}
 
-				player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, DURATION, 1));
+				player.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, DURATION, 1, false, false));
 				player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, DURATION, 0, false, false));
 				player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, DURATION, 0, false, false));
 				player.addStatusEffect(new StatusEffectInstance(StatusEffectRegister.FROST_RESISTANCE, DURATION, 0, false, false));
@@ -239,6 +243,7 @@ public class ActionShoutC2SPacket {
 
 				data.setDATicks(DURATION);
 				data.setDACooldown(24000);
+				player.sendMessage(Text.translatable("anxshouts.shouts.aspect"), true);
 				player.playSound(SoundRegister.DRAGON_ASPECT, SoundCategory.PLAYERS, 0.5f, 1.0f);
 			}
 			case REND -> {

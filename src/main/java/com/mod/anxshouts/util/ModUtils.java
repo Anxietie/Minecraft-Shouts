@@ -2,6 +2,7 @@ package com.mod.anxshouts.util;
 
 import com.mod.anxshouts.components.IShout;
 import net.minecraft.entity.mob.SkeletonEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.passive.WolfEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
@@ -22,9 +23,9 @@ public final class ModUtils {
 
     public static void killCompanions(MinecraftServer server, PlayerEntity player) {
         for (ServerWorld world : server.getWorlds()) {
-            SkeletonEntity skeleton = (SkeletonEntity) world.getEntity(IShout.KEY.get(player).getCompanionUUID());
-            if (skeleton != null)
-                skeleton.discard();
+            IronGolemEntity ig = (IronGolemEntity) world.getEntity(IShout.KEY.get(player).getCompanionUUID());
+            if (ig != null)
+                ig.discard();
         }
     }
 }
