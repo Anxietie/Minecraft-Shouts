@@ -1,6 +1,6 @@
 package com.mod.anxshouts.components;
 
-import com.mod.anxshouts.client.ShoutHandler;
+import com.mod.anxshouts.util.Shout;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -27,8 +27,8 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
     public PlayerShout(PlayerEntity provider) {
         this.provider = provider;
         this.selectedShout = 0;
-        this.unlockedShouts = new int[ShoutHandler.Shout.values().length];
-        this.obtainedShouts = new int[ShoutHandler.Shout.values().length];
+        this.unlockedShouts = new int[Shout.values().length];
+        this.obtainedShouts = new int[Shout.values().length];
         this.shoutCooldown = 0;
         this.souls = 0;
         this.etherealTicks = 0;
@@ -69,7 +69,7 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
 
     @Override
     public void lockAllShouts() {
-        this.unlockedShouts = new int[ShoutHandler.Shout.values().length];
+        this.unlockedShouts = new int[Shout.values().length];
         removeAllShouts();
     }
 
@@ -97,7 +97,7 @@ public class PlayerShout implements IShout, AutoSyncedComponent {
 
     @Override
     public void removeAllShouts() {
-        this.obtainedShouts = new int[ShoutHandler.Shout.values().length];
+        this.obtainedShouts = new int[Shout.values().length];
         this.selectedShout = 0;
         sync();
     }

@@ -1,8 +1,8 @@
-package com.mod.anxshouts.client.gui;
+package com.mod.anxshouts.gui;
 
-import com.mod.anxshouts.client.ShoutHandler;
 import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.networking.ModPackets;
+import com.mod.anxshouts.util.Shout;
 import io.github.cottonmc.cotton.gui.client.LightweightGuiDescription;
 import io.github.cottonmc.cotton.gui.client.ScreenDrawing;
 import io.github.cottonmc.cotton.gui.widget.*;
@@ -25,9 +25,9 @@ import org.jetbrains.annotations.Nullable;
 
 import static com.mod.anxshouts.MinecraftShouts.MODID;
 
+@Environment(EnvType.CLIENT)
 public class ShoutSelectionGui extends LightweightGuiDescription {
     WColorButton selectedShoutBuffer = null;
-
     public ShoutSelectionGui(ClientPlayerEntity player) {
         WGridPanel root = (WGridPanel) rootPanel;
 
@@ -41,8 +41,8 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
         WLabel soulsCount = new WLabel(Text.literal("Souls: " + data.getSoulCount()));
 
-        for (int i = 1; i < ShoutHandler.Shout.values().length; i++) {
-            ShoutHandler.Shout shout = ShoutHandler.Shout.fromOrdinal(i);
+        for (int i = 1; i < Shout.values().length; i++) {
+            Shout shout = Shout.fromOrdinal(i);
             // if (shout == ShoutHandler.Shout.NONE) continue;
             if (!data.hasUnlockedShout(i)) continue;
 
@@ -82,7 +82,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         ClientPlayNetworking.send(ModPackets.SOUL_COUNT_ID, buf);
     }
 
-    private WColorButton createShoutSelectionButton(IShout data, ShoutHandler.Shout shout) {
+    private WColorButton createShoutSelectionButton(IShout data, Shout shout) {
         int ordinal = shout.ordinal();
         WColorButton shoutSelector = new WColorButton(shout.getName()) {
             @Override
@@ -120,7 +120,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
         return shoutSelector;
     }
 
-    private WShoutUnlockButton createShoutUnlockerButton(IShout data, WBox unlockBox, WColorButton shoutSelector, WLabel soulsCount, ShoutHandler.Shout shout) {
+    private WShoutUnlockButton createShoutUnlockerButton(IShout data, WBox unlockBox, WColorButton shoutSelector, WLabel soulsCount, Shout shout) {
         int ordinal = shout.ordinal();
         WShoutUnlockButton unlocker = new WShoutUnlockButton(ordinal, new TextureIcon(new Identifier(MODID, "textures/gui/locked_widget.png"))) {
             @Override
@@ -212,7 +212,7 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
             this.shout = shoutOrdinal;
         }
 
-        public ShoutHandler.Shout getShout() { return ShoutHandler.Shout.fromOrdinal(this.shout); }
+        public Shout getShout() { return Shout.fromOrdinal(this.shout); }
         // public int getOrdinal() { return this.shout; }
     }
 }

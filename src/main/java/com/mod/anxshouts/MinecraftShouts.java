@@ -4,7 +4,6 @@ import com.mod.anxshouts.events.*;
 import com.mod.anxshouts.networking.ModPackets;
 import com.mod.anxshouts.registry.BlockRegister;
 import com.mod.anxshouts.registry.ItemRegister;
-import com.mod.anxshouts.registry.SoundRegister;
 import com.mod.anxshouts.registry.StatusEffectRegister;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -19,30 +18,27 @@ public class MinecraftShouts implements ModInitializer {
      */
     @Override
     public void onInitialize() {
-        LOGGER.info("[Shouts] initializing");
+        LOGGER.info("[anxshouts] initializing");
 
         ModPackets.registerC2SPackets();
-        LOGGER.info("[Shouts] client-to-server packets initialized");
-
-        SoundRegister.registerSounds();
-        LOGGER.info("[Shouts] sounds registered");
+        LOGGER.info("[anxshouts] client-to-server packets initialized");
 
         ServerTickEvent.registerServerTicks();
         EntityDeathEvent.registerEntityDeaths();
-        AdvancementMadeEvent.registerAdvancements();
+        // AdvancementMadeEvent.registerAdvancements();
         AttackEntityEvent.registerEntityAttacks();
         LivingEntityDamageEvent.registerLivingEntityDamage();
         PlayerDisconnectEvent.registerDisconnectEvents();
-        LOGGER.info("[Shouts] events registered");
+        LOGGER.info("[anxshouts] events registered");
 
         BlockRegister.registerBlocks();
-        LOGGER.info("[Shouts] blocks registered");
+        LOGGER.info("[anxshouts] blocks registered");
 
         ItemRegister.registerItems();
         ItemRegister.registerItemGroups();
-        LOGGER.info("[Shouts] items registered");
+        LOGGER.info("[anxshouts] items registered");
 
         StatusEffectRegister.registerStatusEffects();
-        LOGGER.info("[Shouts] status effects registered");
+        LOGGER.info("[anxshouts] status effects registered");
     }
 }

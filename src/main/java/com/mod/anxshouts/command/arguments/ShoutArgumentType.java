@@ -1,7 +1,7 @@
 package com.mod.anxshouts.command.arguments;
 
 import com.google.gson.JsonPrimitive;
-import com.mod.anxshouts.client.ShoutHandler;
+import com.mod.anxshouts.util.Shout;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 public class ShoutArgumentType implements ArgumentType<String> {
     private static final DynamicCommandExceptionType INVALID_ENUM_EXCEPTION = new DynamicCommandExceptionType(value -> Text.translatable("argument.enum.invalid", value));
 
-    private final Codec<ShoutHandler.Shout> codec;
-    private final Supplier<ShoutHandler.Shout[]> valuesSupplier;
+    private final Codec<Shout> codec;
+    private final Supplier<Shout[]> valuesSupplier;
 
     public ShoutArgumentType() {
-        this.codec = ShoutHandler.Shout.CODEC;
-        this.valuesSupplier = ShoutHandler.Shout::values;
+        this.codec = Shout.CODEC;
+        this.valuesSupplier = Shout::values;
     }
 
     public static ShoutArgumentType shout() {
@@ -50,7 +50,7 @@ public class ShoutArgumentType implements ArgumentType<String> {
 
     @Override
     public Collection<String> getExamples() {
-        Collection<String> examples = Arrays.stream(this.valuesSupplier.get()).map(ShoutHandler.Shout::getId).collect(Collectors.toList());
+        Collection<String> examples = Arrays.stream(this.valuesSupplier.get()).map(Shout::getId).collect(Collectors.toList());
         examples.add("all");
         return examples;
     }

@@ -1,11 +1,10 @@
 package com.mod.anxshouts.networking.packet;
 
-import com.mod.anxshouts.client.ShoutHandler;
 import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.networking.ModPackets;
-import com.mod.anxshouts.registry.SoundRegister;
 import com.mod.anxshouts.registry.StatusEffectRegister;
 import com.mod.anxshouts.util.ModUtils;
+import com.mod.anxshouts.util.Shout;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -24,6 +23,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -36,11 +36,11 @@ import java.util.UUID;
 public class ActionShoutC2SPacket {
 	public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
 		IShout data = IShout.KEY.get(player);
-		ShoutHandler.Shout shout = ShoutHandler.Shout.fromOrdinal(data.getSelectedShout());
+		Shout shout = Shout.fromOrdinal(data.getSelectedShout());
 
-		handleShout(player, shout);
+		handleShout(server, player, shout);
 
-		if (shout != ShoutHandler.Shout.ASPECT)
+		if (shout != Shout.ASPECT)
 			player.sendMessage(Text.translatable("anxshouts.shouts." + shout.getId()), true);
 		if (!player.interactionManager.getGameMode().isCreative()) {
 			data.setShoutCooldown((int) (shout.getCooldown() * 20 * (data.hasActiveDA() ? 0.8 : 1))); // converted from seconds to ticks
@@ -104,7 +104,7 @@ public class ActionShoutC2SPacket {
 		return itemEntity;
 	}
 
-	private static void handleShout(ServerPlayerEntity player, ShoutHandler.Shout shout) {
+	private static void handleShout(MinecraftServer server, ServerPlayerEntity player, Shout shout) {
 		IShout data = IShout.KEY.get(player);
 		boolean hasActiveDA = data.hasActiveDA();
 		float yaw = player.getHeadYaw();
@@ -124,14 +124,14 @@ public class ActionShoutC2SPacket {
 					if (!e.isFireImmune() && e.getFireTicks() <= 0)
 						e.setOnFireFor(hasActiveDA ? 10 : 8);
 				}
-				player.playSound(SoundRegister.FIRE_BREATH, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_SHOOT, SoundCategory.HOSTILE, 1f, 0.6f);
 			}
 			case FROST -> {
 				for (Entity e : entities) {
 					e.setFrozenTicks(e.getMinFreezeDamageTicks() + (hasActiveDA ? 250 : 200));
 					((LivingEntity) e).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, (hasActiveDA ? 250 : 200), 1, false, false));
 				}
-				player.playSound(SoundRegister.FROST_BREATH, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 1f, 0.5f);
 			}
 			case FORCE -> {
 				for (Entity e : entities) {
@@ -141,12 +141,12 @@ public class ActionShoutC2SPacket {
 					e.damage(player.getWorld().getDamageSources().playerAttack(player), hasActiveDA ? 0.75f : 0.5f);
 					((LivingEntity) e).takeKnockback(strength, x, z);
 				}
-				player.playSound(SoundRegister.UNRELENTING_FORCE, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_WITHER_BREAK_BLOCK, SoundCategory.HOSTILE, 1f, 0.5f);
 			}
 			case AURA -> {
 				for (Entity e : player.getWorld().getOtherEntities(player, player.getBoundingBox().expand(20.0), LivingEntity.class::isInstance))
 					((LivingEntity) e).addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, hasActiveDA ? 550 : 450, 1, true, true));
-				player.playSound(SoundRegister.AURA_WHISPER, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_PHANTOM_AMBIENT, SoundCategory.AMBIENT, 1f, 0.5f);
 			}
 			case STORM -> {
 				for(Entity e : entities) {
@@ -158,11 +158,11 @@ public class ActionShoutC2SPacket {
 						if (hasActiveDA) player.getWorld().spawnEntity(lightning);
 					}
 				}
-				player.playSound(SoundRegister.STORM_CALL, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, SoundCategory.WEATHER, 1f, 0.5f);
 			}
 			case CLEAR -> {
 				player.getServerWorld().setWeather(hasActiveDA ? 1500 : 1200, 0, false, false); // 1200 seconds is 1 minecraft day
-				player.playSound(SoundRegister.UNRELENTING_FORCE, SoundCategory.PLAYERS, 0.5f, 1.0f); // unrelenting force is generic shout sound
+				player.playSound(SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1f, 0.5f); // unrelenting force is generic shout sound
 			}
 			case DISARM -> {
 				for (Entity e : entities) {
@@ -170,12 +170,12 @@ public class ActionShoutC2SPacket {
 					dropStack(e, ((LivingEntity) e).getMainHandStack().copyAndEmpty(), 2);
 					((ServerWorld) e.getWorld()).spawnParticles(ParticleTypes.ANGRY_VILLAGER, e.getX(), e.getEyeY(), e.getZ(), 1, 0, 1, 0, 0.2);
 				}
-				player.playSound(SoundRegister.DISARM, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, SoundCategory.BLOCKS, 1f, 2f);
 			}
 			case ETHEREAL -> {
 				final int DURATION = hasActiveDA ? 450 : 360; // 360 ticks = 18 seconds which is how long the actual shout lasts in skyrim once the full shout is learned
 				player.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY, DURATION, 1, false, false, false));
-				player.playSound(SoundRegister.BECOME_ETHEREAL, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM, SoundCategory.AMBIENT, 1f, 1f);
 				data.setEtherealTicks(DURATION);
 			}
 			case DRAIN -> {
@@ -185,7 +185,7 @@ public class ActionShoutC2SPacket {
 					((ServerWorld) e.getWorld()).spawnParticles(ParticleTypes.HEART, e.getX(), e.getEyeY(), e.getZ(), 1, 0, 1, 0, 0.2);
 					player.heal(hasActiveDA ? 2.5f : 2.0f);
 				}
-				player.playSound(SoundRegister.DRAIN_VITALITY, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.BLOCK_HONEY_BLOCK_SLIDE, SoundCategory.BLOCKS, 1f, 0.6f);
 			}
 			case ICE -> {
 				final int DURATION = hasActiveDA ? 250 : 200;
@@ -193,7 +193,7 @@ public class ActionShoutC2SPacket {
 					e.setFrozenTicks(e.getMinFreezeDamageTicks() + DURATION); // 200 ticks = 10 seconds
 					((LivingEntity) e).addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, DURATION, 255, false, false), player);
 				}
-				player.playSound(SoundRegister.ICE_FORM, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.BLOCK_AMETHYST_BLOCK_PLACE, SoundCategory.BLOCKS, 1f, 1.5f);
 			}
 			case SPRINT -> {
 				double strength = hasActiveDA ? 2.5 : 2.0;
@@ -204,11 +204,13 @@ public class ActionShoutC2SPacket {
 				buf.writeDouble(strength);
 				buf.writeDouble(x);
 				buf.writeDouble(z);
+				player.takeKnockback(strength, x, z);
 				ServerPlayNetworking.send(player, ModPackets.KNOCKBACK_ID, buf);
 
-				player.playSound(SoundRegister.WHIRLWIND_SPRINT, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH, SoundCategory.BLOCKS, 1f, 1f);
 			}
 			case VALOR -> {
+				if (data.hasActiveValor()) ModUtils.killWolfSoldiers(server, player);
 				final int DURATION = hasActiveDA ? 1500 : 1200; // 1200 ticks = 1 minute
 				WolfEntity wolf = new WolfEntity(EntityType.WOLF, player.getWorld());
 				wolf.setOwner(player);
@@ -226,7 +228,7 @@ public class ActionShoutC2SPacket {
 				data.setValorTicks(DURATION);
 				player.getWorld().spawnEntity(wolf);
 				((ServerWorld) player.getWorld()).spawnParticles(ParticleTypes.EGG_CRACK, player.getX(), player.getY(), player.getZ(), 10, 0, 1, 1, 0.2);
-				player.playSound(SoundRegister.CALL_OF_VALOR, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.GOAT_HORN_SOUNDS.get(7).value(), SoundCategory.VOICE, 1f, 1f);
 			}
 			case ASPECT -> {
 				final int DURATION = 6000; // 6000 ticks = 300 seconds
@@ -244,10 +246,10 @@ public class ActionShoutC2SPacket {
 				data.setDATicks(DURATION);
 				data.setDACooldown(24000);
 				player.sendMessage(Text.translatable("anxshouts.shouts.aspect"), true);
-				player.playSound(SoundRegister.DRAGON_ASPECT, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
 			}
 			case REND -> {
-				player.playSound(SoundRegister.DRAGONREND, SoundCategory.PLAYERS, 0.5f, 1.0f);
+				player.playSound(SoundEvents.ENTITY_ENDER_DRAGON_AMBIENT, SoundCategory.AMBIENT, 1f, 0.5f);
 				if (!player.getWorld().getDimensionEntry().matchesKey(DimensionTypes.THE_END)) break;
 				List<EnderDragonEntity> dragons = player.getWorld().getEntitiesByClass(EnderDragonEntity.class, player.getBoundingBox().expand(100.0), Entity::isAlive);
 				if (dragons.isEmpty()) break;

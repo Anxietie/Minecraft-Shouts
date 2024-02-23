@@ -28,6 +28,7 @@ public class ItemRegister {
 
     public static void registerItems() {
         BlockRegister.WORDS.forEach(block -> register(Registries.BLOCK.getId(block).getPath(), new BlockItem(block, new Item.Settings())));
+
     }
 
     private static Item register(String id, Item item) {

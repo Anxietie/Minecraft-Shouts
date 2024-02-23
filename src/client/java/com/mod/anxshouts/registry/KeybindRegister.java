@@ -1,4 +1,4 @@
-package com.mod.anxshouts.client.registry;
+package com.mod.anxshouts.registry;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

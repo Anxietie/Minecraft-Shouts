@@ -7,9 +7,6 @@
 		"LivingEntityMixin",
 		"StatusEffectMixin"
 	],
-	"client": [
-		"client.ClientAdvancementManagerMixin"
-	],
 	"injectors": {
 		"defaultRequire": 1
 	}

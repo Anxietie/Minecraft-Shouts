@@ -1,9 +1,9 @@
 package com.mod.anxshouts.command;
 
-import com.mod.anxshouts.client.ShoutHandler;
 import com.mod.anxshouts.command.arguments.ShoutArgumentType;
 import com.mod.anxshouts.command.arguments.ShoutEnumArgumentType;
 import com.mod.anxshouts.components.IShout;
+import com.mod.anxshouts.util.Shout;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -60,7 +60,7 @@ public class ShoutsCommand {
         if (shout.equals("all"))
             IShout.KEY.get(player).obtainAllShouts();
 		else
-            IShout.KEY.get(player).obtainShout(ShoutHandler.Shout.byId(shout).ordinal());
+            IShout.KEY.get(player).obtainShout(Shout.byId(shout).ordinal());
 		return Command.SINGLE_SUCCESS;
 	}
 
@@ -70,11 +70,11 @@ public class ShoutsCommand {
         if (shout.equals("all"))
             IShout.KEY.get(player).removeAllShouts();
         else
-            IShout.KEY.get(player).removeShout(ShoutHandler.Shout.byId(shout).ordinal());
+            IShout.KEY.get(player).removeShout(Shout.byId(shout).ordinal());
         return Command.SINGLE_SUCCESS;
 	}
 
-	private static int setSelectedShout(ServerPlayerEntity player, ShoutHandler.Shout shout) throws CommandSyntaxException {
+	private static int setSelectedShout(ServerPlayerEntity player, Shout shout) throws CommandSyntaxException {
 		if (player == null)
 			throw INVALID_SOURCE.create();
 		IShout.KEY.get(player).setSelectedShout(shout.ordinal());
@@ -87,7 +87,7 @@ public class ShoutsCommand {
         if (shout.equals("all"))
             IShout.KEY.get(player).unlockAllShouts();
         else
-            IShout.KEY.get(player).unlockShout(ShoutHandler.Shout.byId(shout).ordinal());
+            IShout.KEY.get(player).unlockShout(Shout.byId(shout).ordinal());
         return Command.SINGLE_SUCCESS;
 	}
 
@@ -97,7 +97,7 @@ public class ShoutsCommand {
         if (shout.equals("all"))
             IShout.KEY.get(player).lockAllShouts();
         else
-            IShout.KEY.get(player).lockShout(ShoutHandler.Shout.byId(shout).ordinal());
+            IShout.KEY.get(player).lockShout(Shout.byId(shout).ordinal());
         return Command.SINGLE_SUCCESS;
 	}
 }

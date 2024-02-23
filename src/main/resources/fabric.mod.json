@@ -12,25 +12,29 @@
   "icon": "assets/anxshouts/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "com.mod.anxshouts.client.MinecraftShoutsClient"
-    ],
     "main": [
       "com.mod.anxshouts.MinecraftShouts"
+    ],
+    "client": [
+      "com.mod.anxshouts.MinecraftShoutsClient"
     ],
     "cardinal-components-entity": [
       "com.mod.anxshouts.components.ModComponents"
     ]
   },
   "mixins": [
-    "anxshouts.mixins.json"
+    "anxshouts.mixins.json",
+    {
+      "config": "anxshouts.client.mixins.json",
+      "environment": "client"
+    }
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
     "java": ">=17",
-    "libgui": "8.0.2"
+    "libgui": ">=8.0.2"
   },
   "custom": {
     "cardinal-components": [

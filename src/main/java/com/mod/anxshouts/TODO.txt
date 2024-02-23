@@ -1,3 +1,0 @@
--add more shouts-
-    dragon aspect:
-        summon skeleton to fight for player once health drops below 50% (use damage callback probably)
