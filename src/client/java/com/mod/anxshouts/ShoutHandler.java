@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.text.Text;
 
@@ -28,8 +29,7 @@ public class ShoutHandler {
             IShout data = IShout.KEY.get(player);
             while (KeybindRegister.SHOUT_KEY.wasPressed()) {
                 if (player.isSpectator()) return;
-                if (player.isCreative()) data.resetShoutCooldown();
-                if (data.getShoutCooldown() > 0) {
+                if (!player.isCreative() && data.getShoutCooldown() > 0) {
                     int remainingSeconds = data.getShoutCooldown() / 20;
                     client.inGameHud.setOverlayMessage(Text.literal("Shout on cooldown for " + remainingSeconds + " more seconds"), true);
                     return;
@@ -38,6 +38,13 @@ public class ShoutHandler {
                 emitParticles(player, 20);
 
                 ClientPlayNetworking.send(ModPackets.ACTION_SHOUT_ID, PacketByteBufs.create());
+
+                // reset cooldown after shouting in creative
+                if (player.isCreative()) {
+                    PacketByteBuf buf = PacketByteBufs.create();
+                    buf.writeInt(0);
+                    ClientPlayNetworking.send(ModPackets.SET_COOLDOWN_SHOUT_ID, buf);
+                }
             }
             while (KeybindRegister.SHOUT_GUI_OPEN_KEY.wasPressed()) {
                 if (client.currentScreen == null)
