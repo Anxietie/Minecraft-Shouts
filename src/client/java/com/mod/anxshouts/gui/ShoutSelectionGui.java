@@ -146,9 +146,10 @@ public class ShoutSelectionGui extends LightweightGuiDescription {
 
     private void tickAllUnlockers(IShout data, WBox unlockBox, int cost) {
         unlockBox.streamChildren().forEach(widget -> {
-            ((WShoutUnlockButton) widget).setEnabled(data.getSoulCount() - cost >= ((WShoutUnlockButton) widget).getShout().getCost());
+            WShoutUnlockButton unlockButton = (WShoutUnlockButton) widget;
+            Shout shout = unlockButton.getShout();
+            unlockButton.setEnabled(data.getSoulCount() - cost >= shout.getCost() && !data.hasObtainedShout(shout.ordinal()));
             widget.tick();
-            widget.tick(); // need to tick twice for whatever reason so it doesnt get fucked up while the gui is still open
         });
     }
 
