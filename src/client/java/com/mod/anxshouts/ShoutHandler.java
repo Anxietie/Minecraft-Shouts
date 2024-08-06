@@ -66,7 +66,6 @@ public class ShoutHandler {
         double velocityZ = Math.sin(ModUtils.convertYaw(player.getHeadYaw()) + (Math.PI/2));
         double velocityY = Math.sin(Math.toRadians(-player.getPitch()));
         for (int i = 0; i < count; i++)
-            // (SPREAD * (2 * random.nextDouble() - 1)) makes the particles deviate off their path by a value between -1 and 1
             player.getWorld().addParticle(particleEffect, player.getX(), player.getEyeY(), player.getZ(), velocityX + (SPREAD * (2 * random.nextDouble() - 1)), velocityY + (SPREAD * (2 * random.nextDouble() - 1)), velocityZ + (SPREAD * (2 * random.nextDouble() - 1)));
     }
 }
