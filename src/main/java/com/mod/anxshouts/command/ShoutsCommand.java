@@ -6,6 +6,7 @@ import com.mod.anxshouts.components.IShout;
 import com.mod.anxshouts.util.Shout;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import net.minecraft.command.argument.EntityArgumentType;
@@ -16,6 +17,7 @@ import net.minecraft.text.Text;
 import static net.minecraft.command.argument.EntityArgumentType.getPlayer;
 import static net.minecraft.server.command.CommandManager.argument;
 import static net.minecraft.server.command.CommandManager.literal;
+import static com.mojang.brigadier.arguments.IntegerArgumentType.getInteger;
 
 public class ShoutsCommand {
 	private static final SimpleCommandExceptionType INVALID_SOURCE = new SimpleCommandExceptionType(Text.translatable("commands.anxshouts.shout.invalid_source"));
@@ -48,6 +50,16 @@ public class ShoutsCommand {
 						.then(literal("lock")
 								.then(argument("shout", ShoutArgumentType.shout())
 										.executes(ctx -> lockShout(getPlayer(ctx, "player"), ShoutArgumentType.getShout(ctx, "shout")))
+								)
+						)
+						.then(literal("cooldown")
+								.then(literal("reset")
+										.executes(ctx -> resetCooldown(getPlayer(ctx, "player")))
+								)
+								.then(literal("set")
+										.then(argument("time", IntegerArgumentType.integer(0)) // time in seconds
+												.executes(ctx -> setCooldown(getPlayer(ctx, "player"), getInteger(ctx, "time")))
+										)
 								)
 						)
 				)
@@ -99,5 +111,19 @@ public class ShoutsCommand {
         else
             IShout.KEY.get(player).lockShout(Shout.byId(shout).ordinal());
         return Command.SINGLE_SUCCESS;
+	}
+
+	private static int resetCooldown(ServerPlayerEntity player) throws CommandSyntaxException {
+		if (player == null)
+			throw INVALID_SOURCE.create();
+		IShout.KEY.get(player).resetShoutCooldown();
+		return Command.SINGLE_SUCCESS;
+	}
+
+	private static int setCooldown(ServerPlayerEntity player, int time /* in seconds */) throws CommandSyntaxException {
+		if (player == null)
+			throw INVALID_SOURCE.create();
+		IShout.KEY.get(player).setShoutCooldown(time * 20);
+		return Command.SINGLE_SUCCESS;
 	}
 }
